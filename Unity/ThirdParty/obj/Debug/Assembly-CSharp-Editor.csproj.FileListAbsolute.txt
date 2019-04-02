@@ -1,0 +1,2 @@
+F:\Project\github\ThirdParty\Unity\ThirdParty\obj\Debug\Assembly-CSharp-Editor.csprojAssemblyReference.cache
+F:\Project\github\ThirdParty\Unity\ThirdParty\obj\Debug\Assembly-CSharp-Editor.csproj.CoreCompileInputs.cache

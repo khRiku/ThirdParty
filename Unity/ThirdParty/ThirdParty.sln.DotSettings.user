@@ -1,0 +1,12 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
+  &lt;Assembly Path="F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll" /&gt;&#xD;
+  &lt;ProjFile Path="C:\Users\Administrator\Desktop\DOTween\DOTween\DOTween\DOTween.csproj" /&gt;&#xD;
+  &lt;Assembly Path="F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\DOTweenPro.dll" /&gt;&#xD;
+  &lt;ProjFile Path="C:\Users\Administrator\Desktop\DOTween\DOTweenPro\DOTweenPro\DOTweenPro.csproj" /&gt;&#xD;
+  &lt;Assembly Path="F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\Editor\DOTweenEditor.dll" /&gt;&#xD;
+  &lt;ProjFile Path="C:\Users\Administrator\Desktop\DOTween\DOTweenEditor\DOTweenEditor.csproj" /&gt;&#xD;
+  &lt;Assembly Path="F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\Editor\DOTweenProEditor.dll" /&gt;&#xD;
+  &lt;ProjFile Path="C:\Users\Administrator\Desktop\DOTween\DOTweenProEditor\DOTweenProEditor.csproj" /&gt;&#xD;
+  &lt;Assembly Path="F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\DOTween.dll" /&gt;&#xD;
+&lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
