@@ -1,17 +1,16 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.DOTweenInspectorMode
+// Assembly: DOTweenPro, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 0FFB13C2-E5DA-4737-82C8-2ACE533F01F7
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\DOTweenPro.dll
 
 namespace DG.Tweening
 {
-	// Token: 0x02000005 RID: 5
-	public enum DOTweenInspectorMode
-	{
-		// Token: 0x0400000D RID: 13
-		Default,
-		// Token: 0x0400000E RID: 14
-		InfoAndWaypointsOnly,
-		// Token: 0x0400000F RID: 15
-		Developer,
-		// Token: 0x04000010 RID: 16
-		OnlyPath
-	}
+  public enum DOTweenInspectorMode
+  {
+    Default,
+    InfoAndWaypointsOnly,
+    Developer,
+    OnlyPath,
+  }
 }

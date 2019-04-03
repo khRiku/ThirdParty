@@ -1,170 +1,151 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Plugins.Vector3ArrayPlugin
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
 using DG.Tweening.Core;
 using DG.Tweening.Core.Easing;
 using DG.Tweening.Core.Enums;
 using DG.Tweening.Plugins.Core;
 using DG.Tweening.Plugins.Options;
+using System;
 using UnityEngine;
 
 namespace DG.Tweening.Plugins
 {
-	// Token: 0x02000020 RID: 32
-	public class Vector3ArrayPlugin : ABSTweenPlugin<Vector3, Vector3[], Vector3ArrayOptions>
-	{
-		// Token: 0x06000194 RID: 404 RVA: 0x00008828 File Offset: 0x00006A28
-		public override void Reset(TweenerCore<Vector3, Vector3[], Vector3ArrayOptions> t)
-		{
-			t.startValue = (t.endValue = (t.changeValue = null));
-		}
+  /// <summary>This plugin generates some GC allocations at startup</summary>
+  public class Vector3ArrayPlugin : ABSTweenPlugin<Vector3, Vector3[], Vector3ArrayOptions>
+  {
+    public override void Reset(TweenerCore<Vector3, Vector3[], Vector3ArrayOptions> t)
+    {
+      t.startValue = t.endValue = t.changeValue = (Vector3[]) null;
+    }
 
-		// Token: 0x06000195 RID: 405 RVA: 0x000080A0 File Offset: 0x000062A0
-		public override void SetFrom(TweenerCore<Vector3, Vector3[], Vector3ArrayOptions> t, bool isRelative)
-		{
-		}
+    public override void SetFrom(TweenerCore<Vector3, Vector3[], Vector3ArrayOptions> t, bool isRelative)
+    {
+    }
 
-		// Token: 0x06000196 RID: 406 RVA: 0x00008850 File Offset: 0x00006A50
-		public override Vector3[] ConvertToStartValue(TweenerCore<Vector3, Vector3[], Vector3ArrayOptions> t, Vector3 value)
-		{
-			int num = t.endValue.Length;
-			Vector3[] array = new Vector3[num];
-			for (int i = 0; i < num; i++)
-			{
-				if (i == 0)
-				{
-					array[i] = value;
-				}
-				else
-				{
-					array[i] = t.endValue[i - 1];
-				}
-			}
-			return array;
-		}
+    public override Vector3[] ConvertToStartValue(TweenerCore<Vector3, Vector3[], Vector3ArrayOptions> t, Vector3 value)
+    {
+      int length = t.endValue.Length;
+      Vector3[] vector3Array = new Vector3[length];
+      for (int index = 0; index < length; ++index)
+        vector3Array[index] = index != 0 ? t.endValue[index - 1] : value;
+      return vector3Array;
+    }
 
-		// Token: 0x06000197 RID: 407 RVA: 0x0000889C File Offset: 0x00006A9C
-		public override void SetRelativeEndValue(TweenerCore<Vector3, Vector3[], Vector3ArrayOptions> t)
-		{
-			int num = t.endValue.Length;
-			for (int i = 0; i < num; i++)
-			{
-				if (i > 0)
-				{
-					t.startValue[i] = t.endValue[i - 1];
-				}
-				t.endValue[i] = t.startValue[i] + t.endValue[i];
-			}
-		}
+    public override void SetRelativeEndValue(TweenerCore<Vector3, Vector3[], Vector3ArrayOptions> t)
+    {
+      int length = t.endValue.Length;
+      for (int index = 0; index < length; ++index)
+      {
+        if (index > 0)
+          t.startValue[index] = t.endValue[index - 1];
+        t.endValue[index] = t.startValue[index] + t.endValue[index];
+      }
+    }
 
-		// Token: 0x06000198 RID: 408 RVA: 0x00008908 File Offset: 0x00006B08
-		public override void SetChangeValue(TweenerCore<Vector3, Vector3[], Vector3ArrayOptions> t)
-		{
-			int num = t.endValue.Length;
-			t.changeValue = new Vector3[num];
-			for (int i = 0; i < num; i++)
-			{
-				t.changeValue[i] = t.endValue[i] - t.startValue[i];
-			}
-		}
+    public override void SetChangeValue(TweenerCore<Vector3, Vector3[], Vector3ArrayOptions> t)
+    {
+      int length = t.endValue.Length;
+      t.changeValue = new Vector3[length];
+      for (int index = 0; index < length; ++index)
+        t.changeValue[index] = t.endValue[index] - t.startValue[index];
+    }
 
-		// Token: 0x06000199 RID: 409 RVA: 0x00008960 File Offset: 0x00006B60
-		public override float GetSpeedBasedDuration(Vector3ArrayOptions options, float unitsXSecond, Vector3[] changeValue)
-		{
-			float num = 0f;
-			int num2 = changeValue.Length;
-			for (int i = 0; i < num2; i++)
-			{
-				float num3 = changeValue[i].magnitude / options.durations[i];
-				options.durations[i] = num3;
-				num += num3;
-			}
-			return num;
-		}
+    public override float GetSpeedBasedDuration(Vector3ArrayOptions options, float unitsXSecond, Vector3[] changeValue)
+    {
+      float num1 = 0.0f;
+      int length = changeValue.Length;
+      for (int index = 0; index < length; ++index)
+      {
+        float num2 = changeValue[index].magnitude / options.durations[index];
+        options.durations[index] = num2;
+        num1 += num2;
+      }
+      return num1;
+    }
 
-		// Token: 0x0600019A RID: 410 RVA: 0x000089A8 File Offset: 0x00006BA8
-		public override void EvaluateAndApply(Vector3ArrayOptions options, Tween t, bool isRelative, DOGetter<Vector3> getter, DOSetter<Vector3> setter, float elapsed, Vector3[] startValue, Vector3[] changeValue, float duration, bool usingInversePosition, UpdateNotice updateNotice)
-		{
-			Vector3 vector = Vector3.zero;
-			if (t.loopType == LoopType.Incremental)
-			{
-				int num = t.isComplete ? (t.completedLoops - 1) : t.completedLoops;
-				if (num > 0)
-				{
-					int num2 = startValue.Length - 1;
-					vector = (startValue[num2] + changeValue[num2] - startValue[0]) * (float)num;
-				}
-			}
-			if (t.isSequenced && t.sequenceParent.loopType == LoopType.Incremental)
-			{
-				int num3 = ((t.loopType == LoopType.Incremental) ? t.loops : 1) * (t.sequenceParent.isComplete ? (t.sequenceParent.completedLoops - 1) : t.sequenceParent.completedLoops);
-				if (num3 > 0)
-				{
-					int num4 = startValue.Length - 1;
-					vector += (startValue[num4] + changeValue[num4] - startValue[0]) * (float)num3;
-				}
-			}
-			int num5 = 0;
-			float num6 = 0f;
-			float num7 = 0f;
-			int num8 = options.durations.Length;
-			float num9 = 0f;
-			for (int i = 0; i < num8; i++)
-			{
-				num7 = options.durations[i];
-				num9 += num7;
-				if (elapsed <= num9)
-				{
-					num5 = i;
-					num6 = elapsed - num6;
-					break;
-				}
-				num6 += num7;
-			}
-			float num10 = EaseManager.Evaluate(t.easeType, t.customEase, num6, num7, t.easeOvershootOrAmplitude, t.easePeriod);
-			AxisConstraint axisConstraint = options.axisConstraint;
-			Vector3 vector2;
-			if (axisConstraint == AxisConstraint.X)
-			{
-				vector2 = getter();
-				vector2.x = startValue[num5].x + vector.x + changeValue[num5].x * num10;
-				if (options.snapping)
-				{
-					vector2.x = (float)Math.Round((double)vector2.x);
-				}
-				setter(vector2);
-				return;
-			}
-			if (axisConstraint == AxisConstraint.Y)
-			{
-				vector2 = getter();
-				vector2.y = startValue[num5].y + vector.y + changeValue[num5].y * num10;
-				if (options.snapping)
-				{
-					vector2.y = (float)Math.Round((double)vector2.y);
-				}
-				setter(vector2);
-				return;
-			}
-			if (axisConstraint != AxisConstraint.Z)
-			{
-				vector2.x = startValue[num5].x + vector.x + changeValue[num5].x * num10;
-				vector2.y = startValue[num5].y + vector.y + changeValue[num5].y * num10;
-				vector2.z = startValue[num5].z + vector.z + changeValue[num5].z * num10;
-				if (options.snapping)
-				{
-					vector2.x = (float)Math.Round((double)vector2.x);
-					vector2.y = (float)Math.Round((double)vector2.y);
-					vector2.z = (float)Math.Round((double)vector2.z);
-				}
-				setter(vector2);
-				return;
-			}
-			vector2 = getter();
-			vector2.z = startValue[num5].z + vector.z + changeValue[num5].z * num10;
-			if (options.snapping)
-			{
-				vector2.z = (float)Math.Round((double)vector2.z);
-			}
-			setter(vector2);
-		}
-	}
+    public override void EvaluateAndApply(Vector3ArrayOptions options, Tween t, bool isRelative, DOGetter<Vector3> getter, DOSetter<Vector3> setter, float elapsed, Vector3[] startValue, Vector3[] changeValue, float duration, bool usingInversePosition, UpdateNotice updateNotice)
+    {
+      Vector3 vector3 = Vector3.zero;
+      if (t.loopType == LoopType.Incremental)
+      {
+        int num = t.isComplete ? t.completedLoops - 1 : t.completedLoops;
+        if (num > 0)
+        {
+          int index = startValue.Length - 1;
+          vector3 = (startValue[index] + changeValue[index] - startValue[0]) * (float) num;
+        }
+      }
+      if (t.isSequenced && t.sequenceParent.loopType == LoopType.Incremental)
+      {
+        int num = (t.loopType == LoopType.Incremental ? t.loops : 1) * (t.sequenceParent.isComplete ? t.sequenceParent.completedLoops - 1 : t.sequenceParent.completedLoops);
+        if (num > 0)
+        {
+          int index = startValue.Length - 1;
+          vector3 += (startValue[index] + changeValue[index] - startValue[0]) * (float) num;
+        }
+      }
+      int index1 = 0;
+      float time = 0.0f;
+      float duration1 = 0.0f;
+      int length = options.durations.Length;
+      float num1 = 0.0f;
+      for (int index2 = 0; index2 < length; ++index2)
+      {
+        duration1 = options.durations[index2];
+        num1 += duration1;
+        if ((double) elapsed > (double) num1)
+        {
+          time += duration1;
+        }
+        else
+        {
+          index1 = index2;
+          time = elapsed - time;
+          break;
+        }
+      }
+      float num2 = EaseManager.Evaluate(t.easeType, t.customEase, time, duration1, t.easeOvershootOrAmplitude, t.easePeriod);
+      switch (options.axisConstraint)
+      {
+        case AxisConstraint.X:
+          Vector3 pNewValue1 = getter();
+          pNewValue1.x = (float) ((double) startValue[index1].x + (double) vector3.x + (double) changeValue[index1].x * (double) num2);
+          if (options.snapping)
+            pNewValue1.x = (float) Math.Round((double) pNewValue1.x);
+          setter(pNewValue1);
+          break;
+        case AxisConstraint.Y:
+          Vector3 pNewValue2 = getter();
+          pNewValue2.y = (float) ((double) startValue[index1].y + (double) vector3.y + (double) changeValue[index1].y * (double) num2);
+          if (options.snapping)
+            pNewValue2.y = (float) Math.Round((double) pNewValue2.y);
+          setter(pNewValue2);
+          break;
+        case AxisConstraint.Z:
+          Vector3 pNewValue3 = getter();
+          pNewValue3.z = (float) ((double) startValue[index1].z + (double) vector3.z + (double) changeValue[index1].z * (double) num2);
+          if (options.snapping)
+            pNewValue3.z = (float) Math.Round((double) pNewValue3.z);
+          setter(pNewValue3);
+          break;
+        default:
+          Vector3 pNewValue4;
+          pNewValue4.x = (float) ((double) startValue[index1].x + (double) vector3.x + (double) changeValue[index1].x * (double) num2);
+          pNewValue4.y = (float) ((double) startValue[index1].y + (double) vector3.y + (double) changeValue[index1].y * (double) num2);
+          pNewValue4.z = (float) ((double) startValue[index1].z + (double) vector3.z + (double) changeValue[index1].z * (double) num2);
+          if (options.snapping)
+          {
+            pNewValue4.x = (float) Math.Round((double) pNewValue4.x);
+            pNewValue4.y = (float) Math.Round((double) pNewValue4.y);
+            pNewValue4.z = (float) Math.Round((double) pNewValue4.z);
+          }
+          setter(pNewValue4);
+          break;
+      }
+    }
+  }
 }

@@ -1,430 +1,351 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Sequence
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
 using DG.Tweening.Core;
 using DG.Tweening.Core.Easing;
 using DG.Tweening.Core.Enums;
+using System;
+using System.Collections.Generic;
 
 namespace DG.Tweening
 {
-	// Token: 0x02000013 RID: 19
-	public sealed class Sequence : Tween
-	{
-		// Token: 0x0600008D RID: 141 RVA: 0x00003AEE File Offset: 0x00001CEE
-		internal Sequence()
-		{
-			this.tweenType = TweenType.Sequence;
-			this.Reset();
-		}
+  /// <summary>Controls other tweens as a group</summary>
+  public sealed class Sequence : Tween
+  {
+    public readonly List<Tween> sequencedTweens = new List<Tween>();
+    private readonly List<ABSSequentiable> _sequencedObjs = new List<ABSSequentiable>();
+    public float lastTweenInsertTime;
 
-		// Token: 0x0600008E RID: 142 RVA: 0x00003B1C File Offset: 0x00001D1C
-		internal static Sequence DoPrepend(Sequence inSequence, Tween t)
-		{
-			if (t.loops == -1)
-			{
-				t.loops = 1;
-			}
-			float num = t.delay + t.duration * (float)t.loops;
-			inSequence.duration += num;
-			int count = inSequence._sequencedObjs.Count;
-			for (int i = 0; i < count; i++)
-			{
-				ABSSequentiable abssequentiable = inSequence._sequencedObjs[i];
-				abssequentiable.sequencedPosition += num;
-				abssequentiable.sequencedEndPosition += num;
-			}
-			return Sequence.DoInsert(inSequence, t, 0f);
-		}
+    public Sequence()
+    {
+      this.tweenType = TweenType.Sequence;
+      this.Reset();
+    }
 
-		// Token: 0x0600008F RID: 143 RVA: 0x00003BA8 File Offset: 0x00001DA8
-		internal static Sequence DoInsert(Sequence inSequence, Tween t, float atPosition)
-		{
-			TweenManager.AddActiveTweenToSequence(t);
-			atPosition += t.delay;
-			inSequence.lastTweenInsertTime = atPosition;
-			t.isSequenced = (t.creationLocked = true);
-			t.sequenceParent = inSequence;
-			if (t.loops == -1)
-			{
-				t.loops = 1;
-			}
-			float num = t.duration * (float)t.loops;
-			t.autoKill = false;
-			t.delay = (t.elapsedDelay = 0f);
-			t.delayComplete = true;
-			t.isSpeedBased = false;
-			t.sequencedPosition = atPosition;
-			t.sequencedEndPosition = atPosition + num;
-			if (t.sequencedEndPosition > inSequence.duration)
-			{
-				inSequence.duration = t.sequencedEndPosition;
-			}
-			inSequence._sequencedObjs.Add(t);
-			inSequence.sequencedTweens.Add(t);
-			return inSequence;
-		}
+    public static Sequence DoPrepend(Sequence inSequence, Tween t)
+    {
+      if (t.loops == -1)
+        t.loops = 1;
+      float num = t.delay + t.duration * (float) t.loops;
+      inSequence.duration += num;
+      int count = inSequence._sequencedObjs.Count;
+      for (int index = 0; index < count; ++index)
+      {
+        ABSSequentiable sequencedObj = inSequence._sequencedObjs[index];
+        sequencedObj.sequencedPosition += num;
+        sequencedObj.sequencedEndPosition += num;
+      }
+      return Sequence.DoInsert(inSequence, t, 0.0f);
+    }
 
-		// Token: 0x06000090 RID: 144 RVA: 0x00003C6E File Offset: 0x00001E6E
-		internal static Sequence DoAppendInterval(Sequence inSequence, float interval)
-		{
-			inSequence.lastTweenInsertTime = inSequence.duration;
-			inSequence.duration += interval;
-			return inSequence;
-		}
+    public static Sequence DoInsert(Sequence inSequence, Tween t, float atPosition)
+    {
+      TweenManager.AddActiveTweenToSequence(t);
+      atPosition += t.delay;
+      inSequence.lastTweenInsertTime = atPosition;
+      t.isSequenced = t.creationLocked = true;
+      t.sequenceParent = inSequence;
+      if (t.loops == -1)
+        t.loops = 1;
+      float num = t.duration * (float) t.loops;
+      t.autoKill = false;
+      t.delay = t.elapsedDelay = 0.0f;
+      t.delayComplete = true;
+      t.isSpeedBased = false;
+      t.sequencedPosition = atPosition;
+      t.sequencedEndPosition = atPosition + num;
+      if ((double) t.sequencedEndPosition > (double) inSequence.duration)
+        inSequence.duration = t.sequencedEndPosition;
+      inSequence._sequencedObjs.Add((ABSSequentiable) t);
+      inSequence.sequencedTweens.Add(t);
+      return inSequence;
+    }
 
-		// Token: 0x06000091 RID: 145 RVA: 0x00003C8C File Offset: 0x00001E8C
-		internal static Sequence DoPrependInterval(Sequence inSequence, float interval)
-		{
-			inSequence.lastTweenInsertTime = 0f;
-			inSequence.duration += interval;
-			int count = inSequence._sequencedObjs.Count;
-			for (int i = 0; i < count; i++)
-			{
-				ABSSequentiable abssequentiable = inSequence._sequencedObjs[i];
-				abssequentiable.sequencedPosition += interval;
-				abssequentiable.sequencedEndPosition += interval;
-			}
-			return inSequence;
-		}
+    public static Sequence DoAppendInterval(Sequence inSequence, float interval)
+    {
+      inSequence.lastTweenInsertTime = inSequence.duration;
+      inSequence.duration += interval;
+      return inSequence;
+    }
 
-		// Token: 0x06000092 RID: 146 RVA: 0x00003CF4 File Offset: 0x00001EF4
-		internal static Sequence DoInsertCallback(Sequence inSequence, TweenCallback callback, float atPosition)
-		{
-			inSequence.lastTweenInsertTime = atPosition;
-			SequenceCallback sequenceCallback = new SequenceCallback(atPosition, callback);
-			ABSSequentiable abssequentiable = sequenceCallback;
-			sequenceCallback.sequencedEndPosition = atPosition;
-			abssequentiable.sequencedPosition = atPosition;
-			inSequence._sequencedObjs.Add(sequenceCallback);
-			if (inSequence.duration < atPosition)
-			{
-				inSequence.duration = atPosition;
-			}
-			return inSequence;
-		}
+    public static Sequence DoPrependInterval(Sequence inSequence, float interval)
+    {
+      inSequence.lastTweenInsertTime = 0.0f;
+      inSequence.duration += interval;
+      int count = inSequence._sequencedObjs.Count;
+      for (int index = 0; index < count; ++index)
+      {
+        ABSSequentiable sequencedObj = inSequence._sequencedObjs[index];
+        sequencedObj.sequencedPosition += interval;
+        sequencedObj.sequencedEndPosition += interval;
+      }
+      return inSequence;
+    }
 
-		// Token: 0x06000093 RID: 147 RVA: 0x00003D3D File Offset: 0x00001F3D
-		internal override void Reset()
-		{
-			base.Reset();
-			this.sequencedTweens.Clear();
-			this._sequencedObjs.Clear();
-			this.lastTweenInsertTime = 0f;
-		}
+    public static Sequence DoInsertCallback(Sequence inSequence, TweenCallback callback, float atPosition)
+    {
+      inSequence.lastTweenInsertTime = atPosition;
+      SequenceCallback sequenceCallback = new SequenceCallback(atPosition, callback);
+      sequenceCallback.sequencedPosition = sequenceCallback.sequencedEndPosition = atPosition;
+      inSequence._sequencedObjs.Add((ABSSequentiable) sequenceCallback);
+      if ((double) inSequence.duration < (double) atPosition)
+        inSequence.duration = atPosition;
+      return inSequence;
+    }
 
-		// Token: 0x06000094 RID: 148 RVA: 0x00003D68 File Offset: 0x00001F68
-		internal override bool Validate()
-		{
-			int count = this.sequencedTweens.Count;
-			for (int i = 0; i < count; i++)
-			{
-				if (!this.sequencedTweens[i].Validate())
-				{
-					return false;
-				}
-			}
-			return true;
-		}
+    public override void Reset()
+    {
+      base.Reset();
+      this.sequencedTweens.Clear();
+      this._sequencedObjs.Clear();
+      this.lastTweenInsertTime = 0.0f;
+    }
 
-		// Token: 0x06000095 RID: 149 RVA: 0x00003DA3 File Offset: 0x00001FA3
-		internal override bool Startup()
-		{
-			return Sequence.DoStartup(this);
-		}
+    public override bool Validate()
+    {
+      int count = this.sequencedTweens.Count;
+      for (int index = 0; index < count; ++index)
+      {
+        if (!this.sequencedTweens[index].Validate())
+          return false;
+      }
+      return true;
+    }
 
-		// Token: 0x06000096 RID: 150 RVA: 0x00003DAB File Offset: 0x00001FAB
-		internal override bool ApplyTween(float prevPosition, int prevCompletedLoops, int newCompletedSteps, bool useInversePosition, UpdateMode updateMode, UpdateNotice updateNotice)
-		{
-			return Sequence.DoApplyTween(this, prevPosition, prevCompletedLoops, newCompletedSteps, useInversePosition, updateMode);
-		}
+    public override bool Startup()
+    {
+      return Sequence.DoStartup(this);
+    }
 
-		// Token: 0x06000097 RID: 151 RVA: 0x00003DBC File Offset: 0x00001FBC
-		internal static void Setup(Sequence s)
-		{
-			s.autoKill = DOTween.defaultAutoKill;
-			s.isRecyclable = DOTween.defaultRecyclable;
-			s.isPlaying = (DOTween.defaultAutoPlay == AutoPlay.All || DOTween.defaultAutoPlay == AutoPlay.AutoPlaySequences);
-			s.loopType = DOTween.defaultLoopType;
-			s.easeType = Ease.Linear;
-			s.easeOvershootOrAmplitude = DOTween.defaultEaseOvershootOrAmplitude;
-			s.easePeriod = DOTween.defaultEasePeriod;
-		}
+    public override bool ApplyTween(float prevPosition, int prevCompletedLoops, int newCompletedSteps, bool useInversePosition, UpdateMode updateMode, UpdateNotice updateNotice)
+    {
+      return Sequence.DoApplyTween(this, prevPosition, prevCompletedLoops, newCompletedSteps, useInversePosition, updateMode);
+    }
 
-		// Token: 0x06000098 RID: 152 RVA: 0x00003E20 File Offset: 0x00002020
-		internal static bool DoStartup(Sequence s)
-		{
-			if (s.sequencedTweens.Count == 0 && s._sequencedObjs.Count == 0 && s.onComplete == null && s.onKill == null && s.onPause == null && s.onPlay == null && s.onRewind == null && s.onStart == null && s.onStepComplete == null && s.onUpdate == null)
-			{
-				return false;
-			}
-			s.startupDone = true;
-			s.fullDuration = ((s.loops > -1) ? (s.duration * (float)s.loops) : float.PositiveInfinity);
-			Sequence.StableSortSequencedObjs(s._sequencedObjs);
-			if (s.isRelative)
-			{
-				int count = s.sequencedTweens.Count;
-				for (int i = 0; i < count; i++)
-				{
-					Tween tween = s.sequencedTweens[i];
-					if (!s.isBlendable)
-					{
-						s.sequencedTweens[i].isRelative = true;
-					}
-				}
-			}
-			return true;
-		}
+    public static void Setup(Sequence s)
+    {
+      s.autoKill = DOTween.defaultAutoKill;
+      s.isRecyclable = DOTween.defaultRecyclable;
+      s.isPlaying = DOTween.defaultAutoPlay == AutoPlay.All || DOTween.defaultAutoPlay == AutoPlay.AutoPlaySequences;
+      s.loopType = DOTween.defaultLoopType;
+      s.easeType = Ease.Linear;
+      s.easeOvershootOrAmplitude = DOTween.defaultEaseOvershootOrAmplitude;
+      s.easePeriod = DOTween.defaultEasePeriod;
+    }
 
-		// Token: 0x06000099 RID: 153 RVA: 0x00003F08 File Offset: 0x00002108
-		internal static bool DoApplyTween(Sequence s, float prevPosition, int prevCompletedLoops, int newCompletedSteps, bool useInversePosition, UpdateMode updateMode)
-		{
-			float num = prevPosition;
-			float num2 = s.position;
-			if (s.easeType != Ease.Linear)
-			{
-				num = s.duration * EaseManager.Evaluate(s.easeType, s.customEase, num, s.duration, s.easeOvershootOrAmplitude, s.easePeriod);
-				num2 = s.duration * EaseManager.Evaluate(s.easeType, s.customEase, num2, s.duration, s.easeOvershootOrAmplitude, s.easePeriod);
-			}
-			float num3 = 0f;
-			bool flag = s.loopType == LoopType.Yoyo && ((num < s.duration) ? (prevCompletedLoops % 2 != 0) : (prevCompletedLoops % 2 == 0));
-			if (s.isBackwards)
-			{
-				flag = !flag;
-			}
-			float num5;
-			if (newCompletedSteps > 0)
-			{
-				int completedLoops = s.completedLoops;
-				float position = s.position;
-				int num4 = newCompletedSteps;
-				int i = 0;
-				num5 = num;
-				if (updateMode == UpdateMode.Update)
-				{
-					while (i < num4)
-					{
-						if (i > 0)
-						{
-							num5 = num3;
-						}
-						else if (flag && !s.isBackwards)
-						{
-							num5 = s.duration - num5;
-						}
-						num3 = (flag ? 0f : s.duration);
-						if (Sequence.ApplyInternalCycle(s, num5, num3, updateMode, useInversePosition, flag, true))
-						{
-							return true;
-						}
-						i++;
-						if (s.loopType == LoopType.Yoyo)
-						{
-							flag = !flag;
-						}
-					}
-					if (completedLoops != s.completedLoops || Math.Abs(position - s.position) > 1.401298E-45f)
-					{
-						return !s.active;
-					}
-				}
-				else
-				{
-					if (s.loopType == LoopType.Yoyo && newCompletedSteps % 2 != 0)
-					{
-						flag = !flag;
-						num = s.duration - num;
-					}
-					newCompletedSteps = 0;
-				}
-			}
-			if (newCompletedSteps == 1 && s.isComplete)
-			{
-				return false;
-			}
-			if (newCompletedSteps > 0 && !s.isComplete)
-			{
-				num5 = (useInversePosition ? s.duration : 0f);
-				if (s.loopType == LoopType.Restart && num3 > 0f)
-				{
-					Sequence.ApplyInternalCycle(s, s.duration, 0f, UpdateMode.Goto, false, false, false);
-				}
-			}
-			else
-			{
-				num5 = (useInversePosition ? (s.duration - num) : num);
-			}
-			return Sequence.ApplyInternalCycle(s, num5, useInversePosition ? (s.duration - num2) : num2, updateMode, useInversePosition, flag, false);
-		}
+    public static bool DoStartup(Sequence s)
+    {
+      if (s.sequencedTweens.Count == 0 && s._sequencedObjs.Count == 0 && (s.onComplete == null && s.onKill == null) && (s.onPause == null && s.onPlay == null && (s.onRewind == null && s.onStart == null)) && (s.onStepComplete == null && s.onUpdate == null))
+        return false;
+      s.startupDone = true;
+      s.fullDuration = s.loops > -1 ? s.duration * (float) s.loops : float.PositiveInfinity;
+      Sequence.StableSortSequencedObjs(s._sequencedObjs);
+      if (s.isRelative)
+      {
+        int count = s.sequencedTweens.Count;
+        for (int index = 0; index < count; ++index)
+        {
+          Tween sequencedTween = s.sequencedTweens[index];
+          if (!s.isBlendable)
+            s.sequencedTweens[index].isRelative = true;
+        }
+      }
+      return true;
+    }
 
-		// Token: 0x0600009A RID: 154 RVA: 0x0000410C File Offset: 0x0000230C
-		private static bool ApplyInternalCycle(Sequence s, float fromPos, float toPos, UpdateMode updateMode, bool useInverse, bool prevPosIsInverse, bool multiCycleStep = false)
-		{
-			if (toPos < fromPos)
-			{
-				int num = s._sequencedObjs.Count - 1;
-				for (int i = num; i > -1; i--)
-				{
-					if (!s.active)
-					{
-						return true;
-					}
-					ABSSequentiable abssequentiable = s._sequencedObjs[i];
-					if (abssequentiable.sequencedEndPosition >= toPos && abssequentiable.sequencedPosition <= fromPos)
-					{
-						if (abssequentiable.tweenType == TweenType.Callback)
-						{
-							if (updateMode == UpdateMode.Update && prevPosIsInverse)
-							{
-								Tween.OnTweenCallback(abssequentiable.onStart);
-							}
-						}
-						else
-						{
-							float num2 = toPos - abssequentiable.sequencedPosition;
-							if (num2 < 0f)
-							{
-								num2 = 0f;
-							}
-							Tween tween = (Tween)abssequentiable;
-							if (tween.startupDone)
-							{
-								tween.isBackwards = true;
-								if (TweenManager.Goto(tween, num2, false, updateMode))
-								{
-									TweenManager.Despawn(tween, false);
-									s._sequencedObjs.RemoveAt(i);
-									i--;
-									num--;
-								}
-								else if (multiCycleStep && tween.tweenType == TweenType.Sequence)
-								{
-									if (s.position <= 0f && s.completedLoops == 0)
-									{
-										tween.position = 0f;
-									}
-									else
-									{
-										bool flag = s.completedLoops == 0 || (s.isBackwards && (s.completedLoops < s.loops || s.loops == -1));
-										if (tween.isBackwards)
-										{
-											flag = !flag;
-										}
-										if (useInverse)
-										{
-											flag = !flag;
-										}
-										if (s.isBackwards && !useInverse && !prevPosIsInverse)
-										{
-											flag = !flag;
-										}
-										tween.position = (flag ? 0f : tween.duration);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				int num3 = s._sequencedObjs.Count;
-				for (int j = 0; j < num3; j++)
-				{
-					if (!s.active)
-					{
-						return true;
-					}
-					ABSSequentiable abssequentiable2 = s._sequencedObjs[j];
-					if (abssequentiable2.sequencedPosition <= toPos && (abssequentiable2.sequencedPosition <= 0f || abssequentiable2.sequencedEndPosition > fromPos) && (abssequentiable2.sequencedPosition > 0f || abssequentiable2.sequencedEndPosition >= fromPos))
-					{
-						if (abssequentiable2.tweenType == TweenType.Callback)
-						{
-							if (updateMode == UpdateMode.Update && ((!s.isBackwards && !useInverse && !prevPosIsInverse) || (s.isBackwards && useInverse && !prevPosIsInverse)))
-							{
-								Tween.OnTweenCallback(abssequentiable2.onStart);
-							}
-						}
-						else
-						{
-							float num4 = toPos - abssequentiable2.sequencedPosition;
-							if (num4 < 0f)
-							{
-								num4 = 0f;
-							}
-							Tween tween2 = (Tween)abssequentiable2;
-							if (toPos >= abssequentiable2.sequencedEndPosition)
-							{
-								if (!tween2.startupDone)
-								{
-									TweenManager.ForceInit(tween2, true);
-								}
-								if (num4 < tween2.fullDuration)
-								{
-									num4 = tween2.fullDuration;
-								}
-							}
-							tween2.isBackwards = false;
-							if (TweenManager.Goto(tween2, num4, false, updateMode))
-							{
-								TweenManager.Despawn(tween2, false);
-								s._sequencedObjs.RemoveAt(j);
-								j--;
-								num3--;
-							}
-							else if (multiCycleStep && tween2.tweenType == TweenType.Sequence)
-							{
-								if (s.position <= 0f && s.completedLoops == 0)
-								{
-									tween2.position = 0f;
-								}
-								else
-								{
-									bool flag2 = s.completedLoops == 0 || (!s.isBackwards && (s.completedLoops < s.loops || s.loops == -1));
-									if (tween2.isBackwards)
-									{
-										flag2 = !flag2;
-									}
-									if (useInverse)
-									{
-										flag2 = !flag2;
-									}
-									if (s.isBackwards && !useInverse && !prevPosIsInverse)
-									{
-										flag2 = !flag2;
-									}
-									tween2.position = (flag2 ? 0f : tween2.duration);
-								}
-							}
-						}
-					}
-				}
-			}
-			return false;
-		}
+    public static bool DoApplyTween(Sequence s, float prevPosition, int prevCompletedLoops, int newCompletedSteps, bool useInversePosition, UpdateMode updateMode)
+    {
+      float time1 = prevPosition;
+      float time2 = s.position;
+      if (s.easeType != Ease.Linear)
+      {
+        time1 = s.duration * EaseManager.Evaluate(s.easeType, s.customEase, time1, s.duration, s.easeOvershootOrAmplitude, s.easePeriod);
+        time2 = s.duration * EaseManager.Evaluate(s.easeType, s.customEase, time2, s.duration, s.easeOvershootOrAmplitude, s.easePeriod);
+      }
+      float toPos = 0.0f;
+      bool prevPosIsInverse = s.loopType == LoopType.Yoyo && ((double) time1 < (double) s.duration ? (uint) (prevCompletedLoops % 2) > 0U : prevCompletedLoops % 2 == 0);
+      if (s.isBackwards)
+        prevPosIsInverse = !prevPosIsInverse;
+      if (newCompletedSteps > 0)
+      {
+        int completedLoops = s.completedLoops;
+        float position = s.position;
+        int num1 = newCompletedSteps;
+        int num2 = 0;
+        float fromPos = time1;
+        if (updateMode == UpdateMode.Update)
+        {
+          while (num2 < num1)
+          {
+            if (num2 > 0)
+              fromPos = toPos;
+            else if (prevPosIsInverse && !s.isBackwards)
+              fromPos = s.duration - fromPos;
+            toPos = prevPosIsInverse ? 0.0f : s.duration;
+            if (Sequence.ApplyInternalCycle(s, fromPos, toPos, updateMode, useInversePosition, prevPosIsInverse, true))
+              return true;
+            ++num2;
+            if (s.loopType == LoopType.Yoyo)
+              prevPosIsInverse = !prevPosIsInverse;
+          }
+          if (completedLoops != s.completedLoops || (double) Math.Abs(position - s.position) > 1.40129846432482E-45)
+            return !s.active;
+        }
+        else
+        {
+          if (s.loopType == LoopType.Yoyo && newCompletedSteps % 2 != 0)
+          {
+            prevPosIsInverse = !prevPosIsInverse;
+            time1 = s.duration - time1;
+          }
+          newCompletedSteps = 0;
+        }
+      }
+      if (newCompletedSteps == 1 && s.isComplete)
+        return false;
+      float fromPos1;
+      if (newCompletedSteps > 0 && !s.isComplete)
+      {
+        fromPos1 = useInversePosition ? s.duration : 0.0f;
+        if (s.loopType == LoopType.Restart && (double) toPos > 0.0)
+          Sequence.ApplyInternalCycle(s, s.duration, 0.0f, UpdateMode.Goto, false, false, false);
+      }
+      else
+        fromPos1 = useInversePosition ? s.duration - time1 : time1;
+      return Sequence.ApplyInternalCycle(s, fromPos1, useInversePosition ? s.duration - time2 : time2, updateMode, useInversePosition, prevPosIsInverse, false);
+    }
 
-		// Token: 0x0600009B RID: 155 RVA: 0x000044C0 File Offset: 0x000026C0
-		private static void StableSortSequencedObjs(List<ABSSequentiable> list)
-		{
-			int count = list.Count;
-			for (int i = 1; i < count; i++)
-			{
-				int num = i;
-				ABSSequentiable abssequentiable = list[i];
-				while (num > 0 && list[num - 1].sequencedPosition > abssequentiable.sequencedPosition)
-				{
-					list[num] = list[num - 1];
-					num--;
-				}
-				list[num] = abssequentiable;
-			}
-		}
+    private static bool ApplyInternalCycle(Sequence s, float fromPos, float toPos, UpdateMode updateMode, bool useInverse, bool prevPosIsInverse, bool multiCycleStep = false)
+    {
+      if ((double) toPos < (double) fromPos)
+      {
+        int num = s._sequencedObjs.Count - 1;
+        for (int index = num; index > -1; --index)
+        {
+          if (!s.active)
+            return true;
+          ABSSequentiable sequencedObj = s._sequencedObjs[index];
+          if ((double) sequencedObj.sequencedEndPosition >= (double) toPos && (double) sequencedObj.sequencedPosition <= (double) fromPos)
+          {
+            if (sequencedObj.tweenType == TweenType.Callback)
+            {
+              if (updateMode == UpdateMode.Update & prevPosIsInverse)
+                Tween.OnTweenCallback(sequencedObj.onStart);
+            }
+            else
+            {
+              float to = toPos - sequencedObj.sequencedPosition;
+              if ((double) to < 0.0)
+                to = 0.0f;
+              Tween t = (Tween) sequencedObj;
+              if (t.startupDone)
+              {
+                t.isBackwards = true;
+                if (TweenManager.Goto(t, to, false, updateMode))
+                {
+                  TweenManager.Despawn(t, false);
+                  s._sequencedObjs.RemoveAt(index);
+                  --index;
+                  --num;
+                }
+                else if (multiCycleStep && t.tweenType == TweenType.Sequence)
+                {
+                  if ((double) s.position <= 0.0 && s.completedLoops == 0)
+                  {
+                    t.position = 0.0f;
+                  }
+                  else
+                  {
+                    bool flag = s.completedLoops == 0 || s.isBackwards && (s.completedLoops < s.loops || s.loops == -1);
+                    if (t.isBackwards)
+                      flag = !flag;
+                    if (useInverse)
+                      flag = !flag;
+                    if (s.isBackwards && !useInverse && !prevPosIsInverse)
+                      flag = !flag;
+                    t.position = flag ? 0.0f : t.duration;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      else
+      {
+        int count = s._sequencedObjs.Count;
+        for (int index = 0; index < count; ++index)
+        {
+          if (!s.active)
+            return true;
+          ABSSequentiable sequencedObj = s._sequencedObjs[index];
+          if ((double) sequencedObj.sequencedPosition <= (double) toPos && ((double) sequencedObj.sequencedPosition <= 0.0 || (double) sequencedObj.sequencedEndPosition > (double) fromPos) && ((double) sequencedObj.sequencedPosition > 0.0 || (double) sequencedObj.sequencedEndPosition >= (double) fromPos))
+          {
+            if (sequencedObj.tweenType == TweenType.Callback)
+            {
+              if (updateMode == UpdateMode.Update && (s.isBackwards || useInverse || prevPosIsInverse ? (!(s.isBackwards & useInverse) ? 0 : (!prevPosIsInverse ? 1 : 0)) : 1) != 0)
+                Tween.OnTweenCallback(sequencedObj.onStart);
+            }
+            else
+            {
+              float to = toPos - sequencedObj.sequencedPosition;
+              if ((double) to < 0.0)
+                to = 0.0f;
+              Tween t = (Tween) sequencedObj;
+              if ((double) toPos >= (double) sequencedObj.sequencedEndPosition)
+              {
+                if (!t.startupDone)
+                  TweenManager.ForceInit(t, true);
+                if ((double) to < (double) t.fullDuration)
+                  to = t.fullDuration;
+              }
+              t.isBackwards = false;
+              if (TweenManager.Goto(t, to, false, updateMode))
+              {
+                TweenManager.Despawn(t, false);
+                s._sequencedObjs.RemoveAt(index);
+                --index;
+                --count;
+              }
+              else if (multiCycleStep && t.tweenType == TweenType.Sequence)
+              {
+                if ((double) s.position <= 0.0 && s.completedLoops == 0)
+                {
+                  t.position = 0.0f;
+                }
+                else
+                {
+                  bool flag = s.completedLoops == 0 || !s.isBackwards && (s.completedLoops < s.loops || s.loops == -1);
+                  if (t.isBackwards)
+                    flag = !flag;
+                  if (useInverse)
+                    flag = !flag;
+                  if (s.isBackwards && !useInverse && !prevPosIsInverse)
+                    flag = !flag;
+                  t.position = flag ? 0.0f : t.duration;
+                }
+              }
+            }
+          }
+        }
+      }
+      return false;
+    }
 
-		// Token: 0x04000065 RID: 101
-		internal readonly List<Tween> sequencedTweens = new List<Tween>();
-
-		// Token: 0x04000066 RID: 102
-		private readonly List<ABSSequentiable> _sequencedObjs = new List<ABSSequentiable>();
-
-		// Token: 0x04000067 RID: 103
-		internal float lastTweenInsertTime;
-	}
+    private static void StableSortSequencedObjs(List<ABSSequentiable> list)
+    {
+      int count = list.Count;
+      for (int index1 = 1; index1 < count; ++index1)
+      {
+        int index2 = index1;
+        ABSSequentiable absSequentiable;
+        for (absSequentiable = list[index1]; index2 > 0 && (double) list[index2 - 1].sequencedPosition > (double) absSequentiable.sequencedPosition; --index2)
+          list[index2] = list[index2 - 1];
+        list[index2] = absSequentiable;
+      }
+    }
+  }
 }

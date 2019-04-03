@@ -1,17 +1,16 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Core.OnEnableBehaviour
+// Assembly: DOTweenPro, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 0FFB13C2-E5DA-4737-82C8-2ACE533F01F7
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\DOTweenPro.dll
 
 namespace DG.Tweening.Core
 {
-	// Token: 0x0200000E RID: 14
-	public enum OnEnableBehaviour
-	{
-		// Token: 0x04000074 RID: 116
-		None,
-		// Token: 0x04000075 RID: 117
-		Play,
-		// Token: 0x04000076 RID: 118
-		Restart,
-		// Token: 0x04000077 RID: 119
-		RestartFromSpawnPoint
-	}
+  public enum OnEnableBehaviour
+  {
+    None,
+    Play,
+    Restart,
+    RestartFromSpawnPoint,
+  }
 }

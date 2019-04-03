@@ -1,13 +1,15 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.PathType
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
 
 namespace DG.Tweening
 {
-	// Token: 0x0200000E RID: 14
-	public enum PathType
-	{
-		// Token: 0x04000053 RID: 83
-		Linear,
-		// Token: 0x04000054 RID: 84
-		CatmullRom
-	}
+  /// <summary>Type of path to use with DOPath tweens</summary>
+  public enum PathType
+  {
+    Linear,
+    CatmullRom,
+  }
 }

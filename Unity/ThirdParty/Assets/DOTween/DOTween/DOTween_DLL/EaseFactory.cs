@@ -1,34 +1,49 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.EaseFactory
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
 using DG.Tweening.Core.Easing;
 using UnityEngine;
 
 namespace DG.Tweening
 {
-	// Token: 0x0200000B RID: 11
-	public class EaseFactory
-	{
-		// Token: 0x06000064 RID: 100 RVA: 0x00002E68 File Offset: 0x00001068
-		public static EaseFunction StopMotion(int motionFps, Ease? ease = null)
-		{
-			EaseFunction customEase = EaseManager.ToEaseFunction((ease == null) ? DOTween.defaultEaseType : ease.Value);
-			return EaseFactory.StopMotion(motionFps, customEase);
-		}
+  /// <summary>
+  /// Allows to wrap ease method in special ways, adding extra features
+  /// </summary>
+  public class EaseFactory
+  {
+    /// <summary>
+    /// Converts the given ease so that it also creates a stop-motion effect, by playing the tween at the given FPS
+    /// </summary>
+    /// <param name="motionFps">FPS at which the tween should be played</param>
+    /// <param name="ease">Ease type</param>
+    public static EaseFunction StopMotion(int motionFps, Ease? ease = null)
+    {
+      EaseFunction easeFunction = EaseManager.ToEaseFunction(!ease.HasValue ? DOTween.defaultEaseType : ease.Value);
+      return EaseFactory.StopMotion(motionFps, easeFunction);
+    }
 
-		// Token: 0x06000065 RID: 101 RVA: 0x00002E99 File Offset: 0x00001099
-		public static EaseFunction StopMotion(int motionFps, AnimationCurve animCurve)
-		{
-			return EaseFactory.StopMotion(motionFps, new EaseFunction(new EaseCurve(animCurve).Evaluate));
-		}
+    /// <summary>
+    /// Converts the given ease so that it also creates a stop-motion effect, by playing the tween at the given FPS
+    /// </summary>
+    /// <param name="motionFps">FPS at which the tween should be played</param>
+    /// <param name="animCurve">AnimationCurve to use for the ease</param>
+    public static EaseFunction StopMotion(int motionFps, AnimationCurve animCurve)
+    {
+      return EaseFactory.StopMotion(motionFps, new EaseFunction(new EaseCurve(animCurve).Evaluate));
+    }
 
-		// Token: 0x06000066 RID: 102 RVA: 0x00002EB2 File Offset: 0x000010B2
-		public static EaseFunction StopMotion(int motionFps, EaseFunction customEase)
-		{
-			float motionDelay = 1f / (float)motionFps;
-			return delegate(float time, float duration, float overshootOrAmplitude, float period)
-			{
-				float time2 = (time < duration) ? (time - time % motionDelay) : time;
-				return customEase(time2, duration, overshootOrAmplitude, period);
-			};
-		}
-	}
+    /// <summary>
+    /// Converts the given ease so that it also creates a stop-motion effect, by playing the tween at the given FPS
+    /// </summary>
+    /// <param name="motionFps">FPS at which the tween should be played</param>
+    /// <param name="customEase">Custom ease function to use</param>
+    public static EaseFunction StopMotion(int motionFps, EaseFunction customEase)
+    {
+      float motionDelay = 1f / (float) motionFps;
+      return (EaseFunction) ((time, duration, overshootOrAmplitude, period) => customEase((double) time < (double) duration ? time - time % motionDelay : time, duration, overshootOrAmplitude, period));
+    }
+  }
 }

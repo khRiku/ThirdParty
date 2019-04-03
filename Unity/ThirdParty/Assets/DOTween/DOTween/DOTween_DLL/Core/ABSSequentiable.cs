@@ -1,20 +1,18 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Core.ABSSequentiable
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
 
 namespace DG.Tweening.Core
 {
-	// Token: 0x02000046 RID: 70
-	public abstract class ABSSequentiable
-	{
-		// Token: 0x04000118 RID: 280
-		internal TweenType tweenType;
+    public abstract class ABSSequentiable
+    {
+        public TweenType tweenType;
+        public float sequencedPosition;
+        public float sequencedEndPosition;
 
-		// Token: 0x04000119 RID: 281
-		internal float sequencedPosition;
-
-		// Token: 0x0400011A RID: 282
-		internal float sequencedEndPosition;
-
-		// Token: 0x0400011B RID: 283
-		internal TweenCallback onStart;
-	}
+        /// <summary>Called the first time the tween is set in a playing state, after any eventual delay</summary>
+        internal TweenCallback onStart;
+    }
 }

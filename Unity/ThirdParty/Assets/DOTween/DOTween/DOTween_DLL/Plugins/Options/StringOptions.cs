@@ -1,32 +1,25 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Plugins.Options.StringOptions
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
 
 namespace DG.Tweening.Plugins.Options
 {
-	// Token: 0x02000038 RID: 56
-	public struct StringOptions : IPlugOptions
-	{
-		// Token: 0x0600020E RID: 526 RVA: 0x0000BD5C File Offset: 0x00009F5C
-		public void Reset()
-		{
-			this.richTextEnabled = false;
-			this.scrambleMode = ScrambleMode.None;
-			this.scrambledChars = null;
-			this.startValueStrippedLength = (this.changeValueStrippedLength = 0);
-		}
+  public struct StringOptions : IPlugOptions
+  {
+    public bool richTextEnabled;
+    public ScrambleMode scrambleMode;
+    public char[] scrambledChars;
+    internal int startValueStrippedLength;
+    internal int changeValueStrippedLength;
 
-		// Token: 0x040000E7 RID: 231
-		public bool richTextEnabled;
-
-		// Token: 0x040000E8 RID: 232
-		public ScrambleMode scrambleMode;
-
-		// Token: 0x040000E9 RID: 233
-		public char[] scrambledChars;
-
-		// Token: 0x040000EA RID: 234
-		internal int startValueStrippedLength;
-
-		// Token: 0x040000EB RID: 235
-		internal int changeValueStrippedLength;
-	}
+    public void Reset()
+    {
+      this.richTextEnabled = false;
+      this.scrambleMode = ScrambleMode.None;
+      this.scrambledChars = (char[]) null;
+      this.startValueStrippedLength = this.changeValueStrippedLength = 0;
+    }
+  }
 }

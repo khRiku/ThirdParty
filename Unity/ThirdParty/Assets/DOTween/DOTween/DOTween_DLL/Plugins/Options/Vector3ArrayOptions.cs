@@ -1,25 +1,22 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Plugins.Options.Vector3ArrayOptions
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
 
 namespace DG.Tweening.Plugins.Options
 {
-	// Token: 0x02000033 RID: 51
-	public struct Vector3ArrayOptions : IPlugOptions
-	{
-		// Token: 0x06000209 RID: 521 RVA: 0x0000BD29 File Offset: 0x00009F29
-		public void Reset()
-		{
-			this.axisConstraint = AxisConstraint.None;
-			this.snapping = false;
-			this.durations = null;
-		}
+  public struct Vector3ArrayOptions : IPlugOptions
+  {
+    public AxisConstraint axisConstraint;
+    public bool snapping;
+    internal float[] durations;
 
-		// Token: 0x040000E1 RID: 225
-		public AxisConstraint axisConstraint;
-
-		// Token: 0x040000E2 RID: 226
-		public bool snapping;
-
-		// Token: 0x040000E3 RID: 227
-		internal float[] durations;
-	}
+    public void Reset()
+    {
+      this.axisConstraint = AxisConstraint.None;
+      this.snapping = false;
+      this.durations = (float[]) null;
+    }
+  }
 }

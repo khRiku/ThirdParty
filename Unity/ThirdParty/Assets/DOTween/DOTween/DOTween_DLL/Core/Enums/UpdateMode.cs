@@ -1,17 +1,16 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Core.Enums.UpdateMode
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
 
 namespace DG.Tweening.Core.Enums
 {
-	// Token: 0x02000056 RID: 86
-	internal enum UpdateMode
-	{
-		// Token: 0x04000185 RID: 389
-		Update,
-		// Token: 0x04000186 RID: 390
-		Goto,
-		// Token: 0x04000187 RID: 391
-		IgnoreOnUpdate,
-		// Token: 0x04000188 RID: 392
-		IgnoreOnComplete
-	}
+  public enum UpdateMode
+  {
+    Update,
+    Goto,
+    IgnoreOnUpdate,
+    IgnoreOnComplete,
+  }
 }

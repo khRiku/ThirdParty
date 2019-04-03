@@ -1,20 +1,19 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.DOTweenEditor.WpHandle
+// Assembly: DOTweenProEditor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 1AF96003-A4AA-47A6-9D47-0CF90D290097
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\Editor\DOTweenProEditor.dll
 
 namespace DG.DOTweenEditor
 {
-	// Token: 0x02000002 RID: 2
-	internal class WpHandle
-	{
-		// Token: 0x06000001 RID: 1 RVA: 0x00002050 File Offset: 0x00000250
-		public WpHandle(int wpIndex)
-		{
-			this.wpIndex = wpIndex;
-		}
+  internal class WpHandle
+  {
+    internal int controlId;
+    internal int wpIndex;
 
-		// Token: 0x04000001 RID: 1
-		internal int controlId;
-
-		// Token: 0x04000002 RID: 2
-		internal int wpIndex;
-	}
+    public WpHandle(int wpIndex)
+    {
+      this.wpIndex = wpIndex;
+    }
+  }
 }

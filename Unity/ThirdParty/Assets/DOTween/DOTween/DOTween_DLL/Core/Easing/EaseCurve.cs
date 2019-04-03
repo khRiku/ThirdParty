@@ -1,26 +1,30 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Core.Easing.EaseCurve
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
 using UnityEngine;
 
 namespace DG.Tweening.Core.Easing
 {
-	// Token: 0x0200005A RID: 90
-	public class EaseCurve
-	{
-		// Token: 0x060002B6 RID: 694 RVA: 0x000104B5 File Offset: 0x0000E6B5
-		public EaseCurve(AnimationCurve animCurve)
-		{
-			this._animCurve = animCurve;
-		}
+  /// <summary>
+  /// Used to interpret AnimationCurves as eases.
+  /// Public so it can be used by external ease factories
+  /// </summary>
+  public class EaseCurve
+  {
+    private readonly AnimationCurve _animCurve;
 
-		// Token: 0x060002B7 RID: 695 RVA: 0x000104C4 File Offset: 0x0000E6C4
-		public float Evaluate(float time, float duration, float unusedOvershoot, float unusedPeriod)
-		{
-			float time2 = this._animCurve[this._animCurve.length - 1].time;
-			float num = time / duration;
-			return this._animCurve.Evaluate(num * time2);
-		}
+    public EaseCurve(AnimationCurve animCurve)
+    {
+      this._animCurve = animCurve;
+    }
 
-		// Token: 0x0400018F RID: 399
-		private readonly AnimationCurve _animCurve;
-	}
+    public float Evaluate(float time, float duration, float unusedOvershoot, float unusedPeriod)
+    {
+      float time1 = this._animCurve[this._animCurve.length - 1].time;
+      return this._animCurve.Evaluate(time / duration * time1);
+    }
+  }
 }

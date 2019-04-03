@@ -1,11 +1,13 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.DOTweenPro
+// Assembly: DOTweenPro, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 0FFB13C2-E5DA-4737-82C8-2ACE533F01F7
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\DOTweenPro.dll
 
 namespace DG.Tweening
 {
-	// Token: 0x02000007 RID: 7
-	internal class DOTweenPro
-	{
-		// Token: 0x04000038 RID: 56
-		public static readonly string Version = "1.0.075";
-	}
+  internal class DOTweenPro
+  {
+    public static readonly string Version = "1.0.075";
+  }
 }

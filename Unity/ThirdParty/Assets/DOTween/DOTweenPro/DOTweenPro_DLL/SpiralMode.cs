@@ -1,13 +1,15 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.SpiralMode
+// Assembly: DOTweenPro, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 0FFB13C2-E5DA-4737-82C8-2ACE533F01F7
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\DOTweenPro.dll
 
 namespace DG.Tweening
 {
-	// Token: 0x02000008 RID: 8
-	public enum SpiralMode
-	{
-		// Token: 0x0400003A RID: 58
-		Expand,
-		// Token: 0x0400003B RID: 59
-		ExpandThenContract
-	}
+  /// <summary>Spiral tween mode</summary>
+  public enum SpiralMode
+  {
+    Expand,
+    ExpandThenContract,
+  }
 }

@@ -1,17 +1,18 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Plugins.Options.UintOptions
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
 
 namespace DG.Tweening.Plugins.Options
 {
-	// Token: 0x02000032 RID: 50
-	public struct UintOptions : IPlugOptions
-	{
-		// Token: 0x06000208 RID: 520 RVA: 0x0000BD20 File Offset: 0x00009F20
-		public void Reset()
-		{
-			this.isNegativeChangeValue = false;
-		}
+  public struct UintOptions : IPlugOptions
+  {
+    public bool isNegativeChangeValue;
 
-		// Token: 0x040000E0 RID: 224
-		public bool isNegativeChangeValue;
-	}
+    public void Reset()
+    {
+      this.isNegativeChangeValue = false;
+    }
+  }
 }

@@ -1,42 +1,33 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.DOTweenEditor.Core.StylePalette
+// Assembly: DOTweenProEditor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 1AF96003-A4AA-47A6-9D47-0CF90D290097
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\Editor\DOTweenProEditor.dll
+
 using DG.DemiEditor;
 using UnityEngine;
 
 namespace DG.DOTweenEditor.Core
 {
-	// Token: 0x02000009 RID: 9
-	public class StylePalette : DeStylePalette
-	{
-		// Token: 0x04000029 RID: 41
-		public readonly StylePalette.Custom custom = new StylePalette.Custom();
+  public class StylePalette : DeStylePalette
+  {
+    public readonly StylePalette.Custom custom = new StylePalette.Custom();
 
-		// Token: 0x0200000C RID: 12
-		public class Custom : DeStyleSubPalette
-		{
-			// Token: 0x06000029 RID: 41 RVA: 0x00004350 File Offset: 0x00002550
-			public override void Init()
-			{
-				this.stickyToolbar = new GUIStyle(DeGUI.styles.toolbar.flat);
-				this.stickyTitle = GUIStyleExtensions.ContentOffsetX(GUIStyleExtensions.MarginBottom(GUIStyleExtensions.Clone(new GUIStyle(GUI.skin.label), new object[]
-				{
-					1,
-					11
-				}), 0), -2f);
-				this.warningLabel = GUIStyleExtensions.Background(GUIStyleExtensions.Add(new GUIStyle(GUI.skin.label), new object[]
-				{
-					Color.black,
-					0
-				}), DeStylePalette.orangeSquare, null);
-			}
+    public class Custom : DeStyleSubPalette
+    {
+      public GUIStyle stickyToolbar;
+      public GUIStyle stickyTitle;
+      public GUIStyle warningLabel;
 
-			// Token: 0x0400002D RID: 45
-			public GUIStyle stickyToolbar;
-
-			// Token: 0x0400002E RID: 46
-			public GUIStyle stickyTitle;
-
-			// Token: 0x0400002F RID: 47
-			public GUIStyle warningLabel;
-		}
-	}
+      /// <summary>
+      /// Needs to be overridden in order to initialize new styles added from inherited classes
+      /// </summary>
+      public override void Init()
+      {
+        this.stickyToolbar = new GUIStyle(DeGUI.styles.toolbar.flat);
+        this.stickyTitle = new GUIStyle(GUI.skin.label).Clone((object) FontStyle.Bold, (object) 11).MarginBottom(0).ContentOffsetX(-2f);
+        this.warningLabel = new GUIStyle(GUI.skin.label).Add((object) Color.black, (object) Format.RichText).Background(DeStylePalette.orangeSquare, (Texture2D) null);
+      }
+    }
+  }
 }

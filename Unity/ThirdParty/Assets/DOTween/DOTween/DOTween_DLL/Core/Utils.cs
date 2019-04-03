@@ -1,72 +1,73 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Core.Utils
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
+using System;
 using System.Reflection;
 using UnityEngine;
 
 namespace DG.Tweening.Core
 {
-	// Token: 0x02000050 RID: 80
-	public static class Utils
-	{
-		// Token: 0x0600029F RID: 671 RVA: 0x0000F214 File Offset: 0x0000D414
-		internal static Vector3 Vector3FromAngle(float degrees, float magnitude)
-		{
-			float num = degrees * 0.0174532924f;
-			return new Vector3(magnitude * Mathf.Cos(num), magnitude * Mathf.Sin(num), 0f);
-		}
+  public static class Utils
+  {
+    private static readonly string[] _defAssembliesToQuery = new string[2]
+    {
+      "Assembly-CSharp",
+      "Assembly-CSharp-firstpass"
+    };
+    private static Assembly[] _loadedAssemblies;
 
-		// Token: 0x060002A0 RID: 672 RVA: 0x0000F244 File Offset: 0x0000D444
-		internal static float Angle2D(Vector3 from, Vector3 to)
-		{
-			Vector2 right = Vector2.right;
-			to -= from;
-			float num = Vector2.Angle(right, to);
-			if (Vector3.Cross(right, to).z > 0f)
-			{
-				num = 360f - num;
-			}
-			return num * -1f;
-		}
+    /// <summary>Returns a Vector3 with z = 0</summary>
+    public static Vector3 Vector3FromAngle(float degrees, float magnitude)
+    {
+      float f = degrees * ((float) Math.PI / 180f);
+      return new Vector3(magnitude * Mathf.Cos(f), magnitude * Mathf.Sin(f), 0.0f);
+    }
 
-		// Token: 0x060002A1 RID: 673 RVA: 0x0000F294 File Offset: 0x0000D494
-		internal static bool Vector3AreApproximatelyEqual(Vector3 a, Vector3 b)
-		{
-			return Mathf.Approximately(a.x, b.x) && Mathf.Approximately(a.y, b.y) && Mathf.Approximately(a.z, b.z);
-		}
+    /// <summary>Returns the 2D angle between two vectors</summary>
+    public static float Angle2D(Vector3 from, Vector3 to)
+    {
+      Vector2 right = Vector2.right;
+      to -= from;
+      float num = Vector2.Angle(right, (Vector2) to);
+      if ((double) Vector3.Cross((Vector3) right, to).z > 0.0)
+        num = 360f - num;
+      return num * -1f;
+    }
 
-		// Token: 0x060002A2 RID: 674 RVA: 0x0000F2D0 File Offset: 0x0000D4D0
-		public static Type GetLooseScriptType(string typeName)
-		{
-			for (int i = 0; i < Utils._defAssembliesToQuery.Length; i++)
-			{
-				Type type = Type.GetType(string.Format("{0}, {1}", typeName, Utils._defAssembliesToQuery[i]));
-				if (type != null)
-				{
-					return type;
-				}
-			}
-			if (Utils._loadedAssemblies == null)
-			{
-				Utils._loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-			}
-			for (int j = 0; j < Utils._loadedAssemblies.Length; j++)
-			{
-				Type type2 = Type.GetType(string.Format("{0}, {1}", typeName, Utils._loadedAssemblies[j].GetName()));
-				if (type2 != null)
-				{
-					return type2;
-				}
-			}
-			return null;
-		}
+    /// <summary>
+    /// Uses approximate equality on each axis instead of Unity's Vector3 equality,
+    /// because the latter fails (in some cases) when assigning a Vector3 to a transform.position and then checking it.
+    /// </summary>
+    public static bool Vector3AreApproximatelyEqual(Vector3 a, Vector3 b)
+    {
+      if (Mathf.Approximately(a.x, b.x) && Mathf.Approximately(a.y, b.y))
+        return Mathf.Approximately(a.z, b.z);
+      return false;
+    }
 
-		// Token: 0x0400015D RID: 349
-		private static Assembly[] _loadedAssemblies;
-
-		// Token: 0x0400015E RID: 350
-		private static readonly string[] _defAssembliesToQuery = new string[]
-		{
-			"Assembly-CSharp",
-			"Assembly-CSharp-firstpass"
-		};
-	}
+    /// <summary>
+    /// Looks for the type withing all possible project assembly names
+    /// </summary>
+    public static System.Type GetLooseScriptType(string typeName)
+    {
+      for (int index = 0; index < Utils._defAssembliesToQuery.Length; ++index)
+      {
+        System.Type type = System.Type.GetType(string.Format("{0}, {1}", (object) typeName, (object) Utils._defAssembliesToQuery[index]));
+        if (type != null)
+          return type;
+      }
+      if (Utils._loadedAssemblies == null)
+        Utils._loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+      for (int index = 0; index < Utils._loadedAssemblies.Length; ++index)
+      {
+        System.Type type = System.Type.GetType(string.Format("{0}, {1}", (object) typeName, (object) Utils._loadedAssemblies[index].GetName()));
+        if (type != null)
+          return type;
+      }
+      return (System.Type) null;
+    }
+  }
 }

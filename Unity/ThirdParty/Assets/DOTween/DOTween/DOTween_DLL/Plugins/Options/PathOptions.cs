@@ -1,72 +1,46 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Plugins.Options.PathOptions
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
 using UnityEngine;
 
 namespace DG.Tweening.Plugins.Options
 {
-	// Token: 0x02000030 RID: 48
-	public struct PathOptions : IPlugOptions
-	{
-		// Token: 0x06000206 RID: 518 RVA: 0x0000BC80 File Offset: 0x00009E80
-		public void Reset()
-		{
-			this.mode = PathMode.Ignore;
-			this.orientType = OrientType.None;
-			this.lockPositionAxis = (this.lockRotationAxis = AxisConstraint.None);
-			this.isClosedPath = false;
-			this.lookAtPosition = Vector3.zero;
-			this.lookAtTransform = null;
-			this.lookAhead = 0f;
-			this.hasCustomForwardDirection = false;
-			this.forward = Quaternion.identity;
-			this.useLocalPosition = false;
-			this.parent = null;
-			this.startupRot = Quaternion.identity;
-			this.startupZRot = 0f;
-		}
+  public struct PathOptions : IPlugOptions
+  {
+    public PathMode mode;
+    public OrientType orientType;
+    public AxisConstraint lockPositionAxis;
+    public AxisConstraint lockRotationAxis;
+    public bool isClosedPath;
+    public Vector3 lookAtPosition;
+    public Transform lookAtTransform;
+    public float lookAhead;
+    public bool hasCustomForwardDirection;
+    public Quaternion forward;
+    public bool useLocalPosition;
+    public Transform parent;
+    public bool isRigidbody;
+    internal Quaternion startupRot;
+    internal float startupZRot;
 
-		// Token: 0x040000CE RID: 206
-		public PathMode mode;
-
-		// Token: 0x040000CF RID: 207
-		public OrientType orientType;
-
-		// Token: 0x040000D0 RID: 208
-		public AxisConstraint lockPositionAxis;
-
-		// Token: 0x040000D1 RID: 209
-		public AxisConstraint lockRotationAxis;
-
-		// Token: 0x040000D2 RID: 210
-		public bool isClosedPath;
-
-		// Token: 0x040000D3 RID: 211
-		public Vector3 lookAtPosition;
-
-		// Token: 0x040000D4 RID: 212
-		public Transform lookAtTransform;
-
-		// Token: 0x040000D5 RID: 213
-		public float lookAhead;
-
-		// Token: 0x040000D6 RID: 214
-		public bool hasCustomForwardDirection;
-
-		// Token: 0x040000D7 RID: 215
-		public Quaternion forward;
-
-		// Token: 0x040000D8 RID: 216
-		public bool useLocalPosition;
-
-		// Token: 0x040000D9 RID: 217
-		public Transform parent;
-
-		// Token: 0x040000DA RID: 218
-		public bool isRigidbody;
-
-		// Token: 0x040000DB RID: 219
-		internal Quaternion startupRot;
-
-		// Token: 0x040000DC RID: 220
-		internal float startupZRot;
-	}
+    public void Reset()
+    {
+      this.mode = PathMode.Ignore;
+      this.orientType = OrientType.None;
+      this.lockPositionAxis = this.lockRotationAxis = AxisConstraint.None;
+      this.isClosedPath = false;
+      this.lookAtPosition = Vector3.zero;
+      this.lookAtTransform = (Transform) null;
+      this.lookAhead = 0.0f;
+      this.hasCustomForwardDirection = false;
+      this.forward = Quaternion.identity;
+      this.useLocalPosition = false;
+      this.parent = (Transform) null;
+      this.startupRot = Quaternion.identity;
+      this.startupZRot = 0.0f;
+    }
+  }
 }

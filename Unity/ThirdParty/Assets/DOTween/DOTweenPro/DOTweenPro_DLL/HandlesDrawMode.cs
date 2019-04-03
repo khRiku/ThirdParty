@@ -1,13 +1,14 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.HandlesDrawMode
+// Assembly: DOTweenPro, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 0FFB13C2-E5DA-4737-82C8-2ACE533F01F7
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\DOTweenPro.dll
 
 namespace DG.Tweening
 {
-	// Token: 0x02000003 RID: 3
-	public enum HandlesDrawMode
-	{
-		// Token: 0x04000007 RID: 7
-		Orthographic,
-		// Token: 0x04000008 RID: 8
-		Perspective
-	}
+  public enum HandlesDrawMode
+  {
+    Orthographic,
+    Perspective,
+  }
 }

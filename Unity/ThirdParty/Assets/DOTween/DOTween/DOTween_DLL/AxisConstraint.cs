@@ -1,20 +1,21 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.AxisConstraint
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
+using System;
 
 namespace DG.Tweening
 {
-	// Token: 0x02000003 RID: 3
-	[Flags]
-	public enum AxisConstraint
-	{
-		// Token: 0x04000007 RID: 7
-		None = 0,
-		// Token: 0x04000008 RID: 8
-		X = 2,
-		// Token: 0x04000009 RID: 9
-		Y = 4,
-		// Token: 0x0400000A RID: 10
-		Z = 8,
-		// Token: 0x0400000B RID: 11
-		W = 16
-	}
+  /// <summary>What axis to constrain in case of Vector tweens</summary>
+  [Flags]
+  public enum AxisConstraint
+  {
+    None = 0,
+    X = 2,
+    Y = 4,
+    Z = 8,
+    W = 16, // 0x00000010
+  }
 }

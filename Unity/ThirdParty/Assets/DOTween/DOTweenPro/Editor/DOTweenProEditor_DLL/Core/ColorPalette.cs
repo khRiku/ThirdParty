@@ -1,22 +1,25 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.DOTweenEditor.Core.ColorPalette
+// Assembly: DOTweenProEditor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 1AF96003-A4AA-47A6-9D47-0CF90D290097
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\Editor\DOTweenProEditor.dll
+
 using DG.DemiLib;
+using System;
 using UnityEngine;
 
 namespace DG.DOTweenEditor.Core
 {
-	// Token: 0x02000008 RID: 8
-	[Serializable]
-	public class ColorPalette : DeColorPalette
-	{
-		// Token: 0x04000028 RID: 40
-		public ColorPalette.Custom custom = new ColorPalette.Custom();
+  [Serializable]
+  public class ColorPalette : DeColorPalette
+  {
+    public ColorPalette.Custom custom = new ColorPalette.Custom();
 
-		// Token: 0x0200000B RID: 11
-		[Serializable]
-		public class Custom
-		{
-			// Token: 0x0400002C RID: 44
-			public DeSkinColor stickyDivider = new DeSkinColor(Color.black, new Color(0.5f, 0.5f, 0.5f));
-		}
-	}
+    /// <summary>Custom colors</summary>
+    [Serializable]
+    public class Custom
+    {
+      public DeSkinColor stickyDivider = new DeSkinColor(Color.black, new Color(0.5f, 0.5f, 0.5f));
+    }
+  }
 }

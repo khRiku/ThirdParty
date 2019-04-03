@@ -1,103 +1,99 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Plugins.Core.PathCore.CatmullRomDecoder
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
+using System;
 using UnityEngine;
 
 namespace DG.Tweening.Plugins.Core.PathCore
 {
-	// Token: 0x02000042 RID: 66
-	internal class CatmullRomDecoder : ABSPathDecoder
-	{
-		// Token: 0x06000228 RID: 552 RVA: 0x0000C34C File Offset: 0x0000A54C
-		internal override void FinalizePath(Path p, Vector3[] wps, bool isClosedPath)
-		{
-			int num = wps.Length;
-			if (p.controlPoints == null || p.controlPoints.Length != 2)
-			{
-				p.controlPoints = new ControlPoint[2];
-			}
-			if (isClosedPath)
-			{
-				p.controlPoints[0] = new ControlPoint(wps[num - 2], Vector3.zero);
-				p.controlPoints[1] = new ControlPoint(wps[1], Vector3.zero);
-			}
-			else
-			{
-				p.controlPoints[0] = new ControlPoint(wps[1], Vector3.zero);
-				Vector3 vector = wps[num - 1];
-				Vector3 vector2 = vector - wps[num - 2];
-				p.controlPoints[1] = new ControlPoint(vector + vector2, Vector3.zero);
-			}
-			p.subdivisions = num * p.subdivisionsXSegment;
-			this.SetTimeToLengthTables(p, p.subdivisions);
-			this.SetWaypointsLengths(p, p.subdivisionsXSegment);
-		}
+  internal class CatmullRomDecoder : ABSPathDecoder
+  {
+    internal override void FinalizePath(Path p, Vector3[] wps, bool isClosedPath)
+    {
+      int length = wps.Length;
+      if (p.controlPoints == null || p.controlPoints.Length != 2)
+        p.controlPoints = new ControlPoint[2];
+      if (isClosedPath)
+      {
+        p.controlPoints[0] = new ControlPoint(wps[length - 2], Vector3.zero);
+        p.controlPoints[1] = new ControlPoint(wps[1], Vector3.zero);
+      }
+      else
+      {
+        p.controlPoints[0] = new ControlPoint(wps[1], Vector3.zero);
+        Vector3 wp = wps[length - 1];
+        Vector3 vector3 = wp - wps[length - 2];
+        p.controlPoints[1] = new ControlPoint(wp + vector3, Vector3.zero);
+      }
+      p.subdivisions = length * p.subdivisionsXSegment;
+      this.SetTimeToLengthTables(p, p.subdivisions);
+      this.SetWaypointsLengths(p, p.subdivisionsXSegment);
+    }
 
-		// Token: 0x06000229 RID: 553 RVA: 0x0000C43C File Offset: 0x0000A63C
-		internal override Vector3 GetPoint(float perc, Vector3[] wps, Path p, ControlPoint[] controlPoints)
-		{
-			int num = wps.Length - 1;
-			int num2 = (int)Math.Floor((double)(perc * (float)num));
-			int num3 = num - 1;
-			if (num3 > num2)
-			{
-				num3 = num2;
-			}
-			float num4 = perc * (float)num - (float)num3;
-			Vector3 vector = (num3 == 0) ? controlPoints[0].a : wps[num3 - 1];
-			Vector3 vector2 = wps[num3];
-			Vector3 vector3 = wps[num3 + 1];
-			Vector3 vector4 = (num3 + 2 > wps.Length - 1) ? controlPoints[1].a : wps[num3 + 2];
-			return 0.5f * ((-vector + 3f * vector2 - 3f * vector3 + vector4) * (num4 * num4 * num4) + (2f * vector - 5f * vector2 + 4f * vector3 - vector4) * (num4 * num4) + (-vector + vector3) * num4 + 2f * vector2);
-		}
+    internal override Vector3 GetPoint(float perc, Vector3[] wps, Path p, ControlPoint[] controlPoints)
+    {
+      int num1 = wps.Length - 1;
+      int num2 = (int) Math.Floor((double) perc * (double) num1);
+      int index = num1 - 1;
+      if (index > num2)
+        index = num2;
+      float num3 = perc * (float) num1 - (float) index;
+      Vector3 vector3_1 = index == 0 ? controlPoints[0].a : wps[index - 1];
+      Vector3 wp1 = wps[index];
+      Vector3 wp2 = wps[index + 1];
+      Vector3 vector3_2 = index + 2 > wps.Length - 1 ? controlPoints[1].a : wps[index + 2];
+      return 0.5f * ((-vector3_1 + 3f * wp1 - 3f * wp2 + vector3_2) * (num3 * num3 * num3) + (2f * vector3_1 - 5f * wp1 + 4f * wp2 - vector3_2) * (num3 * num3) + (-vector3_1 + wp2) * num3 + 2f * wp1);
+    }
 
-		// Token: 0x0600022A RID: 554 RVA: 0x0000C574 File Offset: 0x0000A774
-		internal void SetTimeToLengthTables(Path p, int subdivisions)
-		{
-			float num = 0f;
-			float num2 = 1f / (float)subdivisions;
-			float[] array = new float[subdivisions];
-			float[] array2 = new float[subdivisions];
-			Vector3 vector = this.GetPoint(0f, p.wps, p, p.controlPoints);
-			for (int i = 1; i < subdivisions + 1; i++)
-			{
-				float num3 = num2 * (float)i;
-				Vector3 point = this.GetPoint(num3, p.wps, p, p.controlPoints);
-				num += Vector3.Distance(point, vector);
-				vector = point;
-				array[i - 1] = num3;
-				array2[i - 1] = num;
-			}
-			p.length = num;
-			p.timesTable = array;
-			p.lengthsTable = array2;
-		}
+    internal void SetTimeToLengthTables(Path p, int subdivisions)
+    {
+      float num1 = 0.0f;
+      float num2 = 1f / (float) subdivisions;
+      float[] numArray1 = new float[subdivisions];
+      float[] numArray2 = new float[subdivisions];
+      Vector3 b = this.GetPoint(0.0f, p.wps, p, p.controlPoints);
+      for (int index = 1; index < subdivisions + 1; ++index)
+      {
+        float perc = num2 * (float) index;
+        Vector3 point = this.GetPoint(perc, p.wps, p, p.controlPoints);
+        num1 += Vector3.Distance(point, b);
+        b = point;
+        numArray1[index - 1] = perc;
+        numArray2[index - 1] = num1;
+      }
+      p.length = num1;
+      p.timesTable = numArray1;
+      p.lengthsTable = numArray2;
+    }
 
-		// Token: 0x0600022B RID: 555 RVA: 0x0000C61C File Offset: 0x0000A81C
-		internal void SetWaypointsLengths(Path p, int subdivisions)
-		{
-			int num = p.wps.Length;
-			float[] array = new float[num];
-			array[0] = 0f;
-			ControlPoint[] array2 = new ControlPoint[2];
-			Vector3[] array3 = new Vector3[2];
-			for (int i = 1; i < num; i++)
-			{
-				array2[0].a = ((i == 1) ? p.controlPoints[0].a : p.wps[i - 2]);
-				array3[0] = p.wps[i - 1];
-				array3[1] = p.wps[i];
-				array2[1].a = ((i == num - 1) ? p.controlPoints[1].a : p.wps[i + 1]);
-				float num2 = 0f;
-				float num3 = 1f / (float)subdivisions;
-				Vector3 vector = this.GetPoint(0f, array3, p, array2);
-				for (int j = 1; j < subdivisions + 1; j++)
-				{
-					float perc = num3 * (float)j;
-					Vector3 point = this.GetPoint(perc, array3, p, array2);
-					num2 += Vector3.Distance(point, vector);
-					vector = point;
-				}
-				array[i] = num2;
-			}
-			p.wpLengths = array;
-		}
-	}
+    internal void SetWaypointsLengths(Path p, int subdivisions)
+    {
+      int length = p.wps.Length;
+      float[] numArray = new float[length];
+      numArray[0] = 0.0f;
+      ControlPoint[] controlPoints = new ControlPoint[2];
+      Vector3[] wps = new Vector3[2];
+      for (int index1 = 1; index1 < length; ++index1)
+      {
+        controlPoints[0].a = index1 == 1 ? p.controlPoints[0].a : p.wps[index1 - 2];
+        wps[0] = p.wps[index1 - 1];
+        wps[1] = p.wps[index1];
+        controlPoints[1].a = index1 == length - 1 ? p.controlPoints[1].a : p.wps[index1 + 1];
+        float num1 = 0.0f;
+        float num2 = 1f / (float) subdivisions;
+        Vector3 b = this.GetPoint(0.0f, wps, p, controlPoints);
+        for (int index2 = 1; index2 < subdivisions + 1; ++index2)
+        {
+          Vector3 point = this.GetPoint(num2 * (float) index2, wps, p, controlPoints);
+          num1 += Vector3.Distance(point, b);
+          b = point;
+        }
+        numArray[index1] = num1;
+      }
+      p.wpLengths = numArray;
+    }
+  }
 }

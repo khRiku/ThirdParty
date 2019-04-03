@@ -1,78 +1,78 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Plugins.Core.PathCore.LinearDecoder
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
 using UnityEngine;
 
 namespace DG.Tweening.Plugins.Core.PathCore
 {
-	// Token: 0x02000043 RID: 67
-	internal class LinearDecoder : ABSPathDecoder
-	{
-		// Token: 0x0600022D RID: 557 RVA: 0x0000C766 File Offset: 0x0000A966
-		internal override void FinalizePath(Path p, Vector3[] wps, bool isClosedPath)
-		{
-			p.controlPoints = null;
-			p.subdivisions = wps.Length * p.subdivisionsXSegment;
-			this.SetTimeToLengthTables(p, p.subdivisions);
-		}
+  internal class LinearDecoder : ABSPathDecoder
+  {
+    internal override void FinalizePath(Path p, Vector3[] wps, bool isClosedPath)
+    {
+      p.controlPoints = (ControlPoint[]) null;
+      p.subdivisions = wps.Length * p.subdivisionsXSegment;
+      this.SetTimeToLengthTables(p, p.subdivisions);
+    }
 
-		// Token: 0x0600022E RID: 558 RVA: 0x0000C78C File Offset: 0x0000A98C
-		internal override Vector3 GetPoint(float perc, Vector3[] wps, Path p, ControlPoint[] controlPoints)
-		{
-			if (perc <= 0f)
-			{
-				p.linearWPIndex = 1;
-				return wps[0];
-			}
-			int num = 0;
-			int num2 = 0;
-			int num3 = p.timesTable.Length;
-			for (int i = 1; i < num3; i++)
-			{
-				if (p.timesTable[i] >= perc)
-				{
-					num = i - 1;
-					num2 = i;
-					break;
-				}
-			}
-			float num4 = p.timesTable[num];
-			float num5 = perc - num4;
-			float num6 = p.length * num5;
-			Vector3 vector = wps[num];
-			Vector3 vector2 = wps[num2];
-			p.linearWPIndex = num2;
-			return vector + Vector3.ClampMagnitude(vector2 - vector, num6);
-		}
+    internal override Vector3 GetPoint(float perc, Vector3[] wps, Path p, ControlPoint[] controlPoints)
+    {
+      if ((double) perc <= 0.0)
+      {
+        p.linearWPIndex = 1;
+        return wps[0];
+      }
+      int index1 = 0;
+      int index2 = 0;
+      int length = p.timesTable.Length;
+      for (int index3 = 1; index3 < length; ++index3)
+      {
+        if ((double) p.timesTable[index3] >= (double) perc)
+        {
+          index1 = index3 - 1;
+          index2 = index3;
+          break;
+        }
+      }
+      float num1 = p.timesTable[index1];
+      float num2 = perc - num1;
+      float maxLength = p.length * num2;
+      Vector3 wp1 = wps[index1];
+      Vector3 wp2 = wps[index2];
+      p.linearWPIndex = index2;
+      return wp1 + Vector3.ClampMagnitude(wp2 - wp1, maxLength);
+    }
 
-		// Token: 0x0600022F RID: 559 RVA: 0x0000C82C File Offset: 0x0000AA2C
-		internal void SetTimeToLengthTables(Path p, int subdivisions)
-		{
-			float num = 0f;
-			int num2 = p.wps.Length;
-			float[] array = new float[num2];
-			Vector3 vector = p.wps[0];
-			for (int i = 0; i < num2; i++)
-			{
-				Vector3 vector2 = p.wps[i];
-				float num3 = Vector3.Distance(vector2, vector);
-				num += num3;
-				vector = vector2;
-				array[i] = num3;
-			}
-			float[] array2 = new float[num2];
-			float num4 = 0f;
-			for (int j = 1; j < num2; j++)
-			{
-				num4 += array[j];
-				array2[j] = num4 / num;
-			}
-			p.length = num;
-			p.wpLengths = array;
-			p.timesTable = array2;
-		}
+    internal void SetTimeToLengthTables(Path p, int subdivisions)
+    {
+      float num1 = 0.0f;
+      int length = p.wps.Length;
+      float[] numArray1 = new float[length];
+      Vector3 b = p.wps[0];
+      for (int index = 0; index < length; ++index)
+      {
+        Vector3 wp = p.wps[index];
+        float num2 = Vector3.Distance(wp, b);
+        num1 += num2;
+        b = wp;
+        numArray1[index] = num2;
+      }
+      float[] numArray2 = new float[length];
+      float num3 = 0.0f;
+      for (int index = 1; index < length; ++index)
+      {
+        num3 += numArray1[index];
+        numArray2[index] = num3 / num1;
+      }
+      p.length = num1;
+      p.wpLengths = numArray1;
+      p.timesTable = numArray2;
+    }
 
-		// Token: 0x06000230 RID: 560 RVA: 0x000080A0 File Offset: 0x000062A0
-		internal void SetWaypointsLengths(Path p, int subdivisions)
-		{
-		}
-	}
+    internal void SetWaypointsLengths(Path p, int subdivisions)
+    {
+    }
+  }
 }

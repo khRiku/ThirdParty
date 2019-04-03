@@ -1,427 +1,322 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Plugins.Core.PathCore.Path
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
 using DG.Tweening.Core;
+using System;
 using UnityEngine;
 
 namespace DG.Tweening.Plugins.Core.PathCore
 {
-	// Token: 0x02000044 RID: 68
-	[Serializable]
-	public class Path
-	{
-		// Token: 0x06000232 RID: 562 RVA: 0x0000C8D8 File Offset: 0x0000AAD8
-		public Path(PathType type, Vector3[] waypoints, int subdivisionsXSegment, Color? gizmoColor = null)
-		{
-			this.type = type;
-			this.subdivisionsXSegment = subdivisionsXSegment;
-			if (gizmoColor != null)
-			{
-				this.gizmoColor = gizmoColor.Value;
-			}
-			this.AssignWaypoints(waypoints, true);
-			this.AssignDecoder(type);
-			if (TweenManager.isUnityEditor)
-			{
-				DOTween.GizmosDelegates.Add(new TweenCallback(this.Draw));
-			}
-		}
+  [Serializable]
+  public class Path
+  {
+    public int linearWPIndex = -1;
+    public Color gizmoColor = new Color(1f, 1f, 1f, 0.7f);
+    private static CatmullRomDecoder _catmullRomDecoder;
+    private static LinearDecoder _linearDecoder;
+    public float[] wpLengths;
+    [SerializeField]
+    public PathType type;
+    [SerializeField]
+    public int subdivisionsXSegment;
+    [SerializeField]
+    public int subdivisions;
+    [SerializeField]
+    public Vector3[] wps;
+    [SerializeField]
+    public ControlPoint[] controlPoints;
+    [SerializeField]
+    public float length;
+    [SerializeField]
+    public bool isFinalized;
+    [SerializeField]
+    public float[] timesTable;
+    [SerializeField]
+    public float[] lengthsTable;
+    private Path _incrementalClone;
+    private int _incrementalIndex;
+    private ABSPathDecoder _decoder;
+    private bool _changed;
+    public Vector3[] nonLinearDrawWps;
+    public Vector3 targetPosition;
+    public Vector3? lookAtPosition;
 
-		// Token: 0x06000233 RID: 563 RVA: 0x0000C961 File Offset: 0x0000AB61
-		public Path()
-		{
-		}
+    public Path(PathType type, Vector3[] waypoints, int subdivisionsXSegment, Color? gizmoColor = null)
+    {
+      this.type = type;
+      this.subdivisionsXSegment = subdivisionsXSegment;
+      if (gizmoColor.HasValue)
+        this.gizmoColor = gizmoColor.Value;
+      this.AssignWaypoints(waypoints, true);
+      this.AssignDecoder(type);
+      if (!TweenManager.isUnityEditor)
+        return;
+      DOTween.GizmosDelegates.Add(new TweenCallback(this.Draw));
+    }
 
-		// Token: 0x06000234 RID: 564 RVA: 0x0000C990 File Offset: 0x0000AB90
-		public void FinalizePath(bool isClosedPath, AxisConstraint lockPositionAxes, Vector3 currTargetVal)
-		{
-			if (lockPositionAxes != AxisConstraint.None)
-			{
-				bool flag = (lockPositionAxes & AxisConstraint.X) == AxisConstraint.X;
-				bool flag2 = (lockPositionAxes & AxisConstraint.Y) == AxisConstraint.Y;
-				bool flag3 = (lockPositionAxes & AxisConstraint.Z) == AxisConstraint.Z;
-				for (int i = 0; i < this.wps.Length; i++)
-				{
-					Vector3 vector = this.wps[i];
-					this.wps[i] = new Vector3(flag ? currTargetVal.x : vector.x, flag2 ? currTargetVal.y : vector.y, flag3 ? currTargetVal.z : vector.z);
-				}
-			}
-			this._decoder.FinalizePath(this, this.wps, isClosedPath);
-			this.isFinalized = true;
-		}
+    public Path()
+    {
+    }
 
-		// Token: 0x06000235 RID: 565 RVA: 0x0000CA37 File Offset: 0x0000AC37
-		public Vector3 GetPoint(float perc, bool convertToConstantPerc = false)
-		{
-			if (convertToConstantPerc)
-			{
-				perc = this.ConvertToConstantPathPerc(perc);
-			}
-			return this._decoder.GetPoint(perc, this.wps, this, this.controlPoints);
-		}
+    public void FinalizePath(bool isClosedPath, AxisConstraint lockPositionAxes, Vector3 currTargetVal)
+    {
+      if (lockPositionAxes != AxisConstraint.None)
+      {
+        bool flag1 = (lockPositionAxes & AxisConstraint.X) == AxisConstraint.X;
+        bool flag2 = (lockPositionAxes & AxisConstraint.Y) == AxisConstraint.Y;
+        bool flag3 = (lockPositionAxes & AxisConstraint.Z) == AxisConstraint.Z;
+        for (int index = 0; index < this.wps.Length; ++index)
+        {
+          Vector3 wp = this.wps[index];
+          this.wps[index] = new Vector3(flag1 ? currTargetVal.x : wp.x, flag2 ? currTargetVal.y : wp.y, flag3 ? currTargetVal.z : wp.z);
+        }
+      }
+      this._decoder.FinalizePath(this, this.wps, isClosedPath);
+      this.isFinalized = true;
+    }
 
-		// Token: 0x06000236 RID: 566 RVA: 0x0000CA60 File Offset: 0x0000AC60
-		public float ConvertToConstantPathPerc(float perc)
-		{
-			if (this.type == PathType.Linear)
-			{
-				return perc;
-			}
-			if (perc > 0f && perc < 1f)
-			{
-				float num = this.length * perc;
-				float num2 = 0f;
-				float num3 = 0f;
-				float num4 = 0f;
-				float num5 = 0f;
-				int num6 = this.lengthsTable.Length;
-				int i = 0;
-				while (i < num6)
-				{
-					if (this.lengthsTable[i] > num)
-					{
-						num4 = this.timesTable[i];
-						num5 = this.lengthsTable[i];
-						if (i > 0)
-						{
-							num3 = this.lengthsTable[i - 1];
-							break;
-						}
-						break;
-					}
-					else
-					{
-						num2 = this.timesTable[i];
-						i++;
-					}
-				}
-				perc = num2 + (num - num3) / (num5 - num3) * (num4 - num2);
-			}
-			if (perc > 1f)
-			{
-				perc = 1f;
-			}
-			else if (perc < 0f)
-			{
-				perc = 0f;
-			}
-			return perc;
-		}
+    /// <summary>
+    /// Gets the point on the path at the given percentage (0 to 1)
+    /// </summary>
+    /// <param name="perc">The percentage (0 to 1) at which to get the point</param>
+    /// <param name="convertToConstantPerc">If TRUE constant speed is taken into account, otherwise not</param>
+    public Vector3 GetPoint(float perc, bool convertToConstantPerc = false)
+    {
+      if (convertToConstantPerc)
+        perc = this.ConvertToConstantPathPerc(perc);
+      return this._decoder.GetPoint(perc, this.wps, this, this.controlPoints);
+    }
 
-		// Token: 0x06000237 RID: 567 RVA: 0x0000CB3C File Offset: 0x0000AD3C
-		public int GetWaypointIndexFromPerc(float perc, bool isMovingForward)
-		{
-			if (perc >= 1f)
-			{
-				return this.wps.Length - 1;
-			}
-			if (perc <= 0f)
-			{
-				return 0;
-			}
-			float num = this.length * perc;
-			float num2 = 0f;
-			int i = 0;
-			int num3 = this.wpLengths.Length;
-			while (i < num3)
-			{
-				num2 += this.wpLengths[i];
-				if (i == num3 - 1)
-				{
-					if (!isMovingForward)
-					{
-						return i;
-					}
-					return i - 1;
-				}
-				else if (num2 >= num)
-				{
-					if (num2 <= num)
-					{
-						return i;
-					}
-					if (!isMovingForward)
-					{
-						return i;
-					}
-					return i - 1;
-				}
-				else
-				{
-					i++;
-				}
-			}
-			return 0;
-		}
+    public float ConvertToConstantPathPerc(float perc)
+    {
+      if (this.type == PathType.Linear)
+        return perc;
+      if ((double) perc > 0.0 && (double) perc < 1.0)
+      {
+        float num1 = this.length * perc;
+        float num2 = 0.0f;
+        float num3 = 0.0f;
+        float num4 = 0.0f;
+        float num5 = 0.0f;
+        int length = this.lengthsTable.Length;
+        for (int index = 0; index < length; ++index)
+        {
+          if ((double) this.lengthsTable[index] > (double) num1)
+          {
+            num4 = this.timesTable[index];
+            num5 = this.lengthsTable[index];
+            if (index > 0)
+            {
+              num3 = this.lengthsTable[index - 1];
+              break;
+            }
+            break;
+          }
+          num2 = this.timesTable[index];
+        }
+        perc = num2 + (float) (((double) num1 - (double) num3) / ((double) num5 - (double) num3) * ((double) num4 - (double) num2));
+      }
+      if ((double) perc > 1.0)
+        perc = 1f;
+      else if ((double) perc < 0.0)
+        perc = 0.0f;
+      return perc;
+    }
 
-		// Token: 0x06000238 RID: 568 RVA: 0x0000CBB8 File Offset: 0x0000ADB8
-		public static Vector3[] GetDrawPoints(Path p, int drawSubdivisionsXSegment)
-		{
-			int num = p.wps.Length;
-			if (p.type == PathType.Linear)
-			{
-				return p.wps;
-			}
-			int num2 = num * drawSubdivisionsXSegment;
-			Vector3[] array = new Vector3[num2 + 1];
-			for (int i = 0; i <= num2; i++)
-			{
-				float perc = (float)i / (float)num2;
-				Vector3 point = p.GetPoint(perc, false);
-				array[i] = point;
-			}
-			return array;
-		}
+    public int GetWaypointIndexFromPerc(float perc, bool isMovingForward)
+    {
+      if ((double) perc >= 1.0)
+        return this.wps.Length - 1;
+      if ((double) perc <= 0.0)
+        return 0;
+      float num1 = this.length * perc;
+      float num2 = 0.0f;
+      int index = 0;
+      for (int length = this.wpLengths.Length; index < length; ++index)
+      {
+        num2 += this.wpLengths[index];
+        if (index == length - 1)
+        {
+          if (!isMovingForward)
+            return index;
+          return index - 1;
+        }
+        if ((double) num2 >= (double) num1)
+        {
+          if ((double) num2 > (double) num1 && isMovingForward)
+            return index - 1;
+          return index;
+        }
+      }
+      return 0;
+    }
 
-		// Token: 0x06000239 RID: 569 RVA: 0x0000CC14 File Offset: 0x0000AE14
-		public static void RefreshNonLinearDrawWps(Path p)
-		{
-			int num = p.wps.Length * 10;
-			if (p.nonLinearDrawWps == null || p.nonLinearDrawWps.Length != num + 1)
-			{
-				p.nonLinearDrawWps = new Vector3[num + 1];
-			}
-			for (int i = 0; i <= num; i++)
-			{
-				float perc = (float)i / (float)num;
-				Vector3 point = p.GetPoint(perc, false);
-				p.nonLinearDrawWps[i] = point;
-			}
-		}
+    public static Vector3[] GetDrawPoints(Path p, int drawSubdivisionsXSegment)
+    {
+      int length = p.wps.Length;
+      if (p.type == PathType.Linear)
+        return p.wps;
+      int num = length * drawSubdivisionsXSegment;
+      Vector3[] vector3Array = new Vector3[num + 1];
+      for (int index = 0; index <= num; ++index)
+      {
+        float perc = (float) index / (float) num;
+        Vector3 point = p.GetPoint(perc, false);
+        vector3Array[index] = point;
+      }
+      return vector3Array;
+    }
 
-		// Token: 0x0600023A RID: 570 RVA: 0x0000CC78 File Offset: 0x0000AE78
-		public void Destroy()
-		{
-			if (TweenManager.isUnityEditor)
-			{
-				DOTween.GizmosDelegates.Remove(new TweenCallback(this.Draw));
-			}
-			this.wps = null;
-			this.wpLengths = (this.timesTable = (this.lengthsTable = null));
-			this.nonLinearDrawWps = null;
-			this.isFinalized = false;
-		}
+    public static void RefreshNonLinearDrawWps(Path p)
+    {
+      int num = p.wps.Length * 10;
+      if (p.nonLinearDrawWps == null || p.nonLinearDrawWps.Length != num + 1)
+        p.nonLinearDrawWps = new Vector3[num + 1];
+      for (int index = 0; index <= num; ++index)
+      {
+        float perc = (float) index / (float) num;
+        Vector3 point = p.GetPoint(perc, false);
+        p.nonLinearDrawWps[index] = point;
+      }
+    }
 
-		// Token: 0x0600023B RID: 571 RVA: 0x0000CCD4 File Offset: 0x0000AED4
-		public Path CloneIncremental(int loopIncrement)
-		{
-			if (this._incrementalClone != null)
-			{
-				if (this._incrementalIndex == loopIncrement)
-				{
-					return this._incrementalClone;
-				}
-				this._incrementalClone.Destroy();
-			}
-			int num = this.wps.Length;
-			Vector3 vector = this.wps[num - 1] - this.wps[0];
-			Vector3[] array = new Vector3[this.wps.Length];
-			for (int i = 0; i < num; i++)
-			{
-				array[i] = this.wps[i] + vector * (float)loopIncrement;
-			}
-			int num2 = this.controlPoints.Length;
-			ControlPoint[] array2 = new ControlPoint[num2];
-			for (int j = 0; j < num2; j++)
-			{
-				array2[j] = this.controlPoints[j] + vector * (float)loopIncrement;
-			}
-			Vector3[] array3 = null;
-			if (this.nonLinearDrawWps != null)
-			{
-				int num3 = this.nonLinearDrawWps.Length;
-				array3 = new Vector3[num3];
-				for (int k = 0; k < num3; k++)
-				{
-					array3[k] = this.nonLinearDrawWps[k] + vector * (float)loopIncrement;
-				}
-			}
-			this._incrementalClone = new Path();
-			this._incrementalIndex = loopIncrement;
-			this._incrementalClone.type = this.type;
-			this._incrementalClone.subdivisionsXSegment = this.subdivisionsXSegment;
-			this._incrementalClone.subdivisions = this.subdivisions;
-			this._incrementalClone.wps = array;
-			this._incrementalClone.controlPoints = array2;
-			if (TweenManager.isUnityEditor)
-			{
-				DOTween.GizmosDelegates.Add(new TweenCallback(this._incrementalClone.Draw));
-			}
-			this._incrementalClone.length = this.length;
-			this._incrementalClone.wpLengths = this.wpLengths;
-			this._incrementalClone.timesTable = this.timesTable;
-			this._incrementalClone.lengthsTable = this.lengthsTable;
-			this._incrementalClone._decoder = this._decoder;
-			this._incrementalClone.nonLinearDrawWps = array3;
-			this._incrementalClone.targetPosition = this.targetPosition;
-			this._incrementalClone.lookAtPosition = this.lookAtPosition;
-			this._incrementalClone.isFinalized = true;
-			return this._incrementalClone;
-		}
+    public void Destroy()
+    {
+      if (TweenManager.isUnityEditor)
+        DOTween.GizmosDelegates.Remove(new TweenCallback(this.Draw));
+      this.wps = (Vector3[]) null;
+      this.wpLengths = this.timesTable = this.lengthsTable = (float[]) null;
+      this.nonLinearDrawWps = (Vector3[]) null;
+      this.isFinalized = false;
+    }
 
-		// Token: 0x0600023C RID: 572 RVA: 0x0000CF1C File Offset: 0x0000B11C
-		public void AssignWaypoints(Vector3[] newWps, bool cloneWps = false)
-		{
-			if (cloneWps)
-			{
-				int num = newWps.Length;
-				this.wps = new Vector3[num];
-				for (int i = 0; i < num; i++)
-				{
-					this.wps[i] = newWps[i];
-				}
-				return;
-			}
-			this.wps = newWps;
-		}
+    public Path CloneIncremental(int loopIncrement)
+    {
+      if (this._incrementalClone != null)
+      {
+        if (this._incrementalIndex == loopIncrement)
+          return this._incrementalClone;
+        this._incrementalClone.Destroy();
+      }
+      int length1 = this.wps.Length;
+      Vector3 vector3 = this.wps[length1 - 1] - this.wps[0];
+      Vector3[] vector3Array1 = new Vector3[this.wps.Length];
+      for (int index = 0; index < length1; ++index)
+        vector3Array1[index] = this.wps[index] + vector3 * (float) loopIncrement;
+      int length2 = this.controlPoints.Length;
+      ControlPoint[] controlPointArray = new ControlPoint[length2];
+      for (int index = 0; index < length2; ++index)
+        controlPointArray[index] = this.controlPoints[index] + vector3 * (float) loopIncrement;
+      Vector3[] vector3Array2 = (Vector3[]) null;
+      if (this.nonLinearDrawWps != null)
+      {
+        int length3 = this.nonLinearDrawWps.Length;
+        vector3Array2 = new Vector3[length3];
+        for (int index = 0; index < length3; ++index)
+          vector3Array2[index] = this.nonLinearDrawWps[index] + vector3 * (float) loopIncrement;
+      }
+      this._incrementalClone = new Path();
+      this._incrementalIndex = loopIncrement;
+      this._incrementalClone.type = this.type;
+      this._incrementalClone.subdivisionsXSegment = this.subdivisionsXSegment;
+      this._incrementalClone.subdivisions = this.subdivisions;
+      this._incrementalClone.wps = vector3Array1;
+      this._incrementalClone.controlPoints = controlPointArray;
+      if (TweenManager.isUnityEditor)
+        DOTween.GizmosDelegates.Add(new TweenCallback(this._incrementalClone.Draw));
+      this._incrementalClone.length = this.length;
+      this._incrementalClone.wpLengths = this.wpLengths;
+      this._incrementalClone.timesTable = this.timesTable;
+      this._incrementalClone.lengthsTable = this.lengthsTable;
+      this._incrementalClone._decoder = this._decoder;
+      this._incrementalClone.nonLinearDrawWps = vector3Array2;
+      this._incrementalClone.targetPosition = this.targetPosition;
+      this._incrementalClone.lookAtPosition = this.lookAtPosition;
+      this._incrementalClone.isFinalized = true;
+      return this._incrementalClone;
+    }
 
-		// Token: 0x0600023D RID: 573 RVA: 0x0000CF64 File Offset: 0x0000B164
-		public void AssignDecoder(PathType pathType)
-		{
-			this.type = pathType;
-			if (pathType == PathType.Linear)
-			{
-				if (Path._linearDecoder == null)
-				{
-					Path._linearDecoder = new LinearDecoder();
-				}
-				this._decoder = Path._linearDecoder;
-				return;
-			}
-			if (Path._catmullRomDecoder == null)
-			{
-				Path._catmullRomDecoder = new CatmullRomDecoder();
-			}
-			this._decoder = Path._catmullRomDecoder;
-		}
+    public void AssignWaypoints(Vector3[] newWps, bool cloneWps = false)
+    {
+      if (cloneWps)
+      {
+        int length = newWps.Length;
+        this.wps = new Vector3[length];
+        for (int index = 0; index < length; ++index)
+          this.wps[index] = newWps[index];
+      }
+      else
+        this.wps = newWps;
+    }
 
-		// Token: 0x0600023E RID: 574 RVA: 0x0000CFB4 File Offset: 0x0000B1B4
-		public void Draw()
-		{
-			Path.Draw(this);
-		}
+    public void AssignDecoder(PathType pathType)
+    {
+      this.type = pathType;
+      if (pathType == PathType.Linear)
+      {
+        if (Path._linearDecoder == null)
+          Path._linearDecoder = new LinearDecoder();
+        this._decoder = (ABSPathDecoder) Path._linearDecoder;
+      }
+      else
+      {
+        if (Path._catmullRomDecoder == null)
+          Path._catmullRomDecoder = new CatmullRomDecoder();
+        this._decoder = (ABSPathDecoder) Path._catmullRomDecoder;
+      }
+    }
 
-		// Token: 0x0600023F RID: 575 RVA: 0x0000CFBC File Offset: 0x0000B1BC
-		private static void Draw(Path p)
-		{
-			if (p.timesTable == null)
-			{
-				return;
-			}
-			Color color = p.gizmoColor;
-			color.a *= 0.5f;
-			Gizmos.color = p.gizmoColor;
-			int num = p.wps.Length;
-			if (p._changed || (p.type != PathType.Linear && p.nonLinearDrawWps == null))
-			{
-				p._changed = false;
-				if (p.type != PathType.Linear)
-				{
-					Path.RefreshNonLinearDrawWps(p);
-				}
-			}
-			if (p.type == PathType.Linear)
-			{
-				Vector3 vector = p.wps[0];
-				for (int i = 0; i < num; i++)
-				{
-					Vector3 vector2 = p.wps[i];
-					Gizmos.DrawLine(vector2, vector);
-					vector = vector2;
-				}
-			}
-			else
-			{
-				Vector3 vector = p.nonLinearDrawWps[0];
-				int num2 = p.nonLinearDrawWps.Length;
-				for (int j = 1; j < num2; j++)
-				{
-					Vector3 vector3 = p.nonLinearDrawWps[j];
-					Gizmos.DrawLine(vector3, vector);
-					vector = vector3;
-				}
-			}
-			Gizmos.color = color;
-			for (int k = 0; k < num; k++)
-			{
-				Gizmos.DrawSphere(p.wps[k], 0.075f);
-			}
-			if (p.lookAtPosition != null)
-			{
-				Vector3 value = p.lookAtPosition.Value;
-				Gizmos.DrawLine(p.targetPosition, value);
-				Gizmos.DrawWireSphere(value, 0.075f);
-			}
-		}
+    public void Draw()
+    {
+      Path.Draw(this);
+    }
 
-		// Token: 0x04000102 RID: 258
-		private static CatmullRomDecoder _catmullRomDecoder;
-
-		// Token: 0x04000103 RID: 259
-		private static LinearDecoder _linearDecoder;
-
-		// Token: 0x04000104 RID: 260
-		public float[] wpLengths;
-
-		// Token: 0x04000105 RID: 261
-		[SerializeField]
-		public PathType type;
-
-		// Token: 0x04000106 RID: 262
-		[SerializeField]
-		public int subdivisionsXSegment;
-
-		// Token: 0x04000107 RID: 263
-		[SerializeField]
-		public int subdivisions;
-
-		// Token: 0x04000108 RID: 264
-		[SerializeField]
-		public Vector3[] wps;
-
-		// Token: 0x04000109 RID: 265
-		[SerializeField]
-		public ControlPoint[] controlPoints;
-
-		// Token: 0x0400010A RID: 266
-		[SerializeField]
-		public float length;
-
-		// Token: 0x0400010B RID: 267
-		[SerializeField]
-		public bool isFinalized;
-
-		// Token: 0x0400010C RID: 268
-		[SerializeField]
-		public float[] timesTable;
-
-		// Token: 0x0400010D RID: 269
-		[SerializeField]
-		public float[] lengthsTable;
-
-		// Token: 0x0400010E RID: 270
-		public int linearWPIndex = -1;
-
-		// Token: 0x0400010F RID: 271
-		private Path _incrementalClone;
-
-		// Token: 0x04000110 RID: 272
-		private int _incrementalIndex;
-
-		// Token: 0x04000111 RID: 273
-		private ABSPathDecoder _decoder;
-
-		// Token: 0x04000112 RID: 274
-		private bool _changed;
-
-		// Token: 0x04000113 RID: 275
-		public Vector3[] nonLinearDrawWps;
-
-		// Token: 0x04000114 RID: 276
-		public Vector3 targetPosition;
-
-		// Token: 0x04000115 RID: 277
-		public Vector3? lookAtPosition;
-
-		// Token: 0x04000116 RID: 278
-		public Color gizmoColor = new Color(1f, 1f, 1f, 0.7f);
-	}
+    private static void Draw(Path p)
+    {
+      if (p.timesTable == null)
+        return;
+      Color gizmoColor = p.gizmoColor;
+      gizmoColor.a *= 0.5f;
+      Gizmos.color = p.gizmoColor;
+      int length1 = p.wps.Length;
+      if (p._changed || p.type != PathType.Linear && p.nonLinearDrawWps == null)
+      {
+        p._changed = false;
+        if (p.type != PathType.Linear)
+          Path.RefreshNonLinearDrawWps(p);
+      }
+      if (p.type == PathType.Linear)
+      {
+        Vector3 to = p.wps[0];
+        for (int index = 0; index < length1; ++index)
+        {
+          Vector3 wp = p.wps[index];
+          Gizmos.DrawLine(wp, to);
+          to = wp;
+        }
+      }
+      else
+      {
+        Vector3 to = p.nonLinearDrawWps[0];
+        int length2 = p.nonLinearDrawWps.Length;
+        for (int index = 1; index < length2; ++index)
+        {
+          Vector3 nonLinearDrawWp = p.nonLinearDrawWps[index];
+          Gizmos.DrawLine(nonLinearDrawWp, to);
+          to = nonLinearDrawWp;
+        }
+      }
+      Gizmos.color = gizmoColor;
+      for (int index = 0; index < length1; ++index)
+        Gizmos.DrawSphere(p.wps[index], 0.075f);
+      if (!p.lookAtPosition.HasValue)
+        return;
+      Vector3 vector3 = p.lookAtPosition.Value;
+      Gizmos.DrawLine(p.targetPosition, vector3);
+      Gizmos.DrawWireSphere(vector3, 0.075f);
+    }
+  }
 }

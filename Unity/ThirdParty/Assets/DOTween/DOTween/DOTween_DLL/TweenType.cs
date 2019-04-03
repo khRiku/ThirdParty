@@ -1,15 +1,16 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.TweenType
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
 
 namespace DG.Tweening
 {
-	// Token: 0x0200001A RID: 26
-	public enum TweenType
-	{
-		// Token: 0x040000B8 RID: 184
-		Tweener,
-		// Token: 0x040000B9 RID: 185
-		Sequence,
-		// Token: 0x040000BA RID: 186
-		Callback
-	}
+  /// <summary>Used internally</summary>
+  public enum TweenType
+  {
+    Tweener,
+    Sequence,
+    Callback,
+  }
 }

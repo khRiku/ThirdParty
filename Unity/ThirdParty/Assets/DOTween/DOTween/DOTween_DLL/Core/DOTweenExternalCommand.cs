@@ -1,24 +1,29 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Core.DOTweenExternalCommand
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
+
 using DG.Tweening.Plugins.Options;
+using System;
 using UnityEngine;
 
 namespace DG.Tweening.Core
 {
-	// Token: 0x0200004D RID: 77
-	public static class DOTweenExternalCommand
-	{
-		// Token: 0x14000001 RID: 1
-		// (add) Token: 0x06000274 RID: 628 RVA: 0x0000D7C0 File Offset: 0x0000B9C0
-		// (remove) Token: 0x06000275 RID: 629 RVA: 0x0000D7F4 File Offset: 0x0000B9F4
-		public static event Action<PathOptions, Tween, Quaternion, Transform> SetOrientationOnPath;
+  /// <summary>
+  /// Used to dispatch commands that need to be captured externally, usually by Modules
+  /// </summary>
+  public static class DOTweenExternalCommand
+  {
+    public static event Action<PathOptions, Tween, Quaternion, Transform> SetOrientationOnPath;
 
-		// Token: 0x06000276 RID: 630 RVA: 0x0000D827 File Offset: 0x0000BA27
-		internal static void Dispatch_SetOrientationOnPath(PathOptions options, Tween t, Quaternion newRot, Transform trans)
-		{
-			if (DOTweenExternalCommand.SetOrientationOnPath != null)
-			{
-				DOTweenExternalCommand.SetOrientationOnPath(options, t, newRot, trans);
-			}
-		}
-	}
+    internal static void Dispatch_SetOrientationOnPath(PathOptions options, Tween t, Quaternion newRot, Transform trans)
+    {
+      // ISSUE: reference to a compiler-generated field
+      if (DOTweenExternalCommand.SetOrientationOnPath == null)
+        return;
+      // ISSUE: reference to a compiler-generated field
+      DOTweenExternalCommand.SetOrientationOnPath(options, t, newRot, trans);
+    }
+  }
 }

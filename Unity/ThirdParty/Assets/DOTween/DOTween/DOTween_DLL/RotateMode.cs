@@ -1,17 +1,17 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.RotateMode
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
 
 namespace DG.Tweening
 {
-	// Token: 0x0200000F RID: 15
-	public enum RotateMode
-	{
-		// Token: 0x04000056 RID: 86
-		Fast,
-		// Token: 0x04000057 RID: 87
-		FastBeyond360,
-		// Token: 0x04000058 RID: 88
-		WorldAxisAdd,
-		// Token: 0x04000059 RID: 89
-		LocalAxisAdd
-	}
+  /// <summary>Rotation mode used with DORotate methods</summary>
+  public enum RotateMode
+  {
+    Fast,
+    FastBeyond360,
+    WorldAxisAdd,
+    LocalAxisAdd,
+  }
 }

@@ -1,19 +1,17 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.Core.Enums.SpecialStartupMode
+// Assembly: DOTween, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: D19E8A38-5444-4F3D-A5A4-C530527191EF
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTween\DOTween.dll
 
 namespace DG.Tweening.Core.Enums
 {
-	// Token: 0x02000054 RID: 84
-	public enum SpecialStartupMode
-	{
-		// Token: 0x0400017C RID: 380
-		None,
-		// Token: 0x0400017D RID: 381
-		SetLookAt,
-		// Token: 0x0400017E RID: 382
-		SetShake,
-		// Token: 0x0400017F RID: 383
-		SetPunch,
-		// Token: 0x04000180 RID: 384
-		SetCameraShakePosition
-	}
+  public enum SpecialStartupMode
+  {
+    None,
+    SetLookAt,
+    SetShake,
+    SetPunch,
+    SetCameraShakePosition,
+  }
 }

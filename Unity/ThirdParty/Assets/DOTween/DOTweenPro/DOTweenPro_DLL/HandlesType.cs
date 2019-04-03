@@ -1,13 +1,14 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: DG.Tweening.HandlesType
+// Assembly: DOTweenPro, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 0FFB13C2-E5DA-4737-82C8-2ACE533F01F7
+// Assembly location: F:\Project\github\ThirdParty\Unity\ThirdParty\Assets\Demigiant\DOTweenPro\DOTweenPro.dll
 
 namespace DG.Tweening
 {
-	// Token: 0x02000004 RID: 4
-	public enum HandlesType
-	{
-		// Token: 0x0400000A RID: 10
-		Free,
-		// Token: 0x0400000B RID: 11
-		Full
-	}
+  public enum HandlesType
+  {
+    Free,
+    Full,
+  }
 }
