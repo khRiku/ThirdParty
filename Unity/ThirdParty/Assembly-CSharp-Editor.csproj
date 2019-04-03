@@ -60,21 +60,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\DelayedCall.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\DOTweenDefines.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\DOTweenEditorPreview.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\EditorUtils.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\MenuItems.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\UI\DOTweenComponentInspector.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\UI\DOTweenSettingsInspector.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\UI\DOTweenUtilityWindow.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\UI\DOTweenUtilityWindowModules.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\UI\EditorGUIUtils.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\UtilityWindowModificationProcessor.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditor_DLL\UtilityWindowPostProcessor.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenUpgradeManager_DLL\Autorun.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenUpgradeManager_DLL\Properties\AssemblyInfo.cs" />
-    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenUpgradeManager_DLL\UpgradeWindow.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\DelayedCall.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenDefines.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\DOTweenEditorPreview.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\EditorUtils.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\MenuItems.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\UI\DOTweenComponentInspector.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\UI\DOTweenSettingsInspector.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\UI\DOTweenUtilityWindow.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\UI\DOTweenUtilityWindowModules.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\UI\EditorGUIUtils.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\UtilityWindowModificationProcessor.cs" />
+    <Compile Include="Assets\DOTween\DOTween\Editor\UtilityWindowPostProcessor.cs" />
     <Compile Include="Assets\DOTween\DOTweenPro\Editor\DOTweenAnimationInspector.cs" />
     <Compile Include="Assets\DOTween\DOTweenPro\Editor\DOTweenPreviewManager.cs" />
     <Compile Include="Assets\DOTween\DOTweenPro\Editor\DOTweenProEditor_DLL\Core\ABSAnimationInspector.cs" />
@@ -335,6 +332,12 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="DemiLib">
+      <HintPath>F:/Project/github/ThirdParty/Unity/ThirdParty/Assets/DOTween/DemiLib/Core/DemiLib.dll</HintPath>
+    </Reference>
+    <Reference Include="DemiEditor">
+      <HintPath>F:/Project/github/ThirdParty/Unity/ThirdParty/Assets/DOTween/DemiLib/Core/Editor/DemiEditor.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>F:/Project/github/ThirdParty/Unity/ThirdParty/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
     </Reference>
@@ -352,12 +355,6 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>F:/Project/github/ThirdParty/Unity/ThirdParty/Library/PackageCache/com.unity.purchasing@2.0.1/Editor/UnityEditor.Purchasing.dll</HintPath>
-    </Reference>
-    <Reference Include="DemiLib">
-      <HintPath>F:/Project/github/ThirdParty/Unity/ThirdParty/Assets/DOTween/DemiLib/Core/DemiLib.dll</HintPath>
-    </Reference>
-    <Reference Include="DemiEditor">
-      <HintPath>F:/Project/github/ThirdParty/Unity/ThirdParty/Assets/DOTween/DemiLib/Core/Editor/DemiEditor.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>E:/WorkProgramFiles/Unity/2018.3.0b11/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

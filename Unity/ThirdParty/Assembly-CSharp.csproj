@@ -65,8 +65,8 @@
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Color2.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\ABSSequentiable.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\Debugger.cs" />
-    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\DOGetter.cs" />
-    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\DOSetter.cs" />
+    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\DOGetter`1.cs" />
+    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\DOSetter`1.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\DOTweenComponent.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\DOTweenExternalCommand.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\DOTweenSettings.cs" />
@@ -82,7 +82,7 @@
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\Enums\UpdateNotice.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\Extensions.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\SequenceCallback.cs" />
-    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\TweenerCore.cs" />
+    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\TweenerCore`3.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\TweenManager.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Core\Utils.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\CustomPlugins\PureQuaternionPlugin.cs" />
@@ -98,9 +98,9 @@
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\PathType.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\Color2Plugin.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\ColorPlugin.cs" />
-    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\Core\ABSTweenPlugin.cs" />
-    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\Core\IPlugSetter.cs" />
-    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\Core\ITPlugin.cs" />
+    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\Core\ABSTweenPlugin`3.cs" />
+    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\Core\IPlugSetter`4.cs" />
+    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\Core\ITPlugin`4.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\Core\ITweenPlugin.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\Core\PathCore\ABSPathDecoder.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Plugins\Core\PathCore\CatmullRomDecoder.cs" />
@@ -142,8 +142,8 @@
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Sequence.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\ShortcutExtensions.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Tween.cs" />
-    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\TweenCallback.2.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\TweenCallback.cs" />
+    <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\TweenCallback`1.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\Tweener.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\TweenExtensions.cs" />
     <Compile Include="Assets\DOTween\DOTween\DOTween_DLL\TweenParams.cs" />
@@ -177,7 +177,6 @@
     <Compile Include="Assets\DOTween\DOTweenPro\DOTweenTextMeshPro.cs" />
     <Compile Include="Assets\DOTween\DOTweenPro\DOTweenTk2d.cs" />
     <None Include="Assets\DOTween\DOTweenPro\readme.txt" />
-    <None Include="Assets\DOTween\DOTween\DOTween_DLL\readme.txt" />
     <None Include="Assets\DOTween\DemiLib\Core\DemiLib.xml" />
     <None Include="Assets\DOTween\readme_DOTweenPro.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
@@ -396,6 +395,9 @@
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>E:/WorkProgramFiles/Unity/2018.3.0b11/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
+    <Reference Include="DemiLib">
+      <HintPath>F:/Project/github/ThirdParty/Unity/ThirdParty/Assets/DOTween/DemiLib/Core/DemiLib.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>F:/Project/github/ThirdParty/Unity/ThirdParty/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
@@ -407,9 +409,6 @@
     </Reference>
     <Reference Include="UnityEngine.Purchasing">
       <HintPath>F:/Project/github/ThirdParty/Unity/ThirdParty/Library/PackageCache/com.unity.purchasing@2.0.1/UnityEngine.Purchasing.dll</HintPath>
-    </Reference>
-    <Reference Include="DemiLib">
-      <HintPath>F:/Project/github/ThirdParty/Unity/ThirdParty/Assets/DOTween/DemiLib/Core/DemiLib.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>E:/WorkProgramFiles/Unity/2018.3.0b11/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
